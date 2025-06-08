@@ -20,7 +20,7 @@ namespace PHEDChhattisgarh
         {
             if (!IsPostBack)
             {
-                // Don't load dropdown on page load - use search instead
+                pnlResults.Visible = false;
             }
         }
 
@@ -112,6 +112,7 @@ namespace PHEDChhattisgarh
             {
                 ClientScript.RegisterStartupScript(this.GetType(), "Validation",
                     "alert('Please enter Book No.');", true);
+                pnlResults.Visible = false;
                 return;
             }
 
@@ -120,6 +121,7 @@ namespace PHEDChhattisgarh
             {
                 ClientScript.RegisterStartupScript(this.GetType(), "Validation",
                     "alert('Invalid Book No. Please check and try again.');", true);
+                pnlResults.Visible = false;
                 return;
             }
 
@@ -130,6 +132,7 @@ namespace PHEDChhattisgarh
                 {
                     ClientScript.RegisterStartupScript(this.GetType(), "Validation",
                         "alert('Invalid Work Code for selected Book No.');", true);
+                    pnlResults.Visible = false;
                     return;
                 }
 
@@ -139,6 +142,7 @@ namespace PHEDChhattisgarh
             else
             {
                 // Load all work codes for this book
+                pnlResults.Visible = false;
                 LoadWorkCodesForBook(bookNo);
             }
         }
@@ -150,6 +154,9 @@ namespace PHEDChhattisgarh
             {
                 ClientScript.RegisterStartupScript(this.GetType(), "NotCertified",
                     "alert('Work Code is not certified.');", true);
+
+                // Hide the details section when not certified
+                pnlResults.Visible = false;
                 return;
             }
 
@@ -172,20 +179,22 @@ namespace PHEDChhattisgarh
                 new SqlDataAdapter(cmd).Fill(dt);
             }
 
-            gvAgreements.DataSource = dt;
-            gvAgreements.DataBind();
-
             if (dt.Rows.Count > 0)
             {
+                // Show the grid and button when data is found
+                gvAgreements.DataSource = dt;
+                gvAgreements.DataBind();
+                pnlResults.Visible = true;
+
                 ViewState["Year"] = dt.Rows[0]["Year_Of_Agreement"].ToString();
                 ViewState["By"] = dt.Rows[0]["AgreementBy"].ToString();
                 ViewState["No"] = dt.Rows[0]["Agreement_No"].ToString();
                 ViewState["Work"] = workCode;
-                btnViewComponents.Visible = true;
             }
             else
             {
-                btnViewComponents.Visible = false;
+                // Hide both grid and button when no data is found
+                pnlResults.Visible = false;
                 ClientScript.RegisterStartupScript(this.GetType(), "NoData",
                     "alert('No agreement found for this Work Code.');", true);
             }
@@ -200,6 +209,7 @@ namespace PHEDChhattisgarh
             {
                 ClientScript.RegisterStartupScript(this.GetType(), "Validation",
                     "alert('Please select both Book No and Work Code.');", true);
+                pnlResults.Visible = false;
                 return;
             }
 

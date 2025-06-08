@@ -547,7 +547,7 @@ body {
         </div>
         
         <div class="floating-button-container">
-            <asp:Button ID="btnPrevious" runat="server" Text="Previous" CssClass="btn btn-secondary floating-button" OnClick="btnPrevious_Click" />
+            <asp:Button ID="btnPrevious" runat="server" Text="Previous" CssClass="btn btn-primary floating-button" OnClick="btnPrevious_Click" />
         </div>
     </form>
 </body>

@@ -357,40 +357,41 @@
             </asp:Panel>
 
             <!-- Results -->
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h3><b>Details of Work</b></h3>
-                </div>
-                <div class="card-body">
-                    <asp:GridView
-                        ID="gvAgreements"
-                        runat="server"
-                        AutoGenerateColumns="false"
-                        DataKeyNames="Work_Code,AgreementBy,Year_Of_Agreement,Agreement_No"
-                        OnRowCommand="gvAgreements_RowCommand"
-                        CssClass="table table-bordered details-grid"
-                        GridLines="Both"
-                        EmptyDataText="No records found. Please search first.">
-                        <Columns>
-                            <asp:BoundField DataField="Year_Of_Agreement" HeaderText="Year" />
-                            <asp:BoundField DataField="AgreementByName" HeaderText="Agreement By" />
-                            <asp:BoundField DataField="Agreement_No" HeaderText="Agreement No" />
-                            <asp:BoundField DataField="Work_Code" HeaderText="Work Code" />
-                        </Columns>
-                    </asp:GridView>
-                </div>
-                <div class="row mt-3">
-                    <div class="col-md-3">
-                        <asp:Button
-                            ID="btnViewComponents"
+            <asp:Panel ID="pnlResults" runat="server" Visible="false">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h3><b>Details of Work</b></h3>
+                    </div>
+                    <div class="card-body">
+                        <asp:GridView
+                            ID="gvAgreements"
                             runat="server"
-                            Text="View Components"
-                            OnClick="btnViewComponents_Click"
-                            Visible="false"
-                            CssClass="btn btn-primary form-control" />
+                            AutoGenerateColumns="false"
+                            DataKeyNames="Work_Code,AgreementBy,Year_Of_Agreement,Agreement_No"
+                            OnRowCommand="gvAgreements_RowCommand"
+                            CssClass="table table-bordered details-grid"
+                            GridLines="Both"
+                            EmptyDataText="No records found. Please search first.">
+                            <Columns>
+                                <asp:BoundField DataField="Year_Of_Agreement" HeaderText="Year" />
+                                <asp:BoundField DataField="AgreementByName" HeaderText="Agreement By" />
+                                <asp:BoundField DataField="Agreement_No" HeaderText="Agreement No" />
+                                <asp:BoundField DataField="Work_Code" HeaderText="Work Code" />
+                            </Columns>
+                        </asp:GridView>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-3">
+                            <asp:Button
+                                ID="btnViewComponents"
+                                runat="server"
+                                Text="View Components"
+                                OnClick="btnViewComponents_Click"
+                                CssClass="btn btn-primary form-control" />
+                        </div>
                     </div>
                 </div>
-            </div>
+            </asp:Panel>
         </div>
     </form>
 

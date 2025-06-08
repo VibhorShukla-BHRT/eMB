@@ -178,9 +178,7 @@ namespace PHEDChhattisgarh
                             "&AgreementNo=" + Request.QueryString["AgreementNo"] +
                             "&ComponentID=" + Request.QueryString["ComponentID"] +
                             "&SORItemNo=" + sorItemNo +
-                            "&AAAmount=" + aa +
-                            "&SORSubItem=" + Server.UrlEncode(sorSubItem) +
-                            "&Units=" + Server.UrlEncode(units);
+                            "&AAAmount=" + aa;
                 Response.Redirect("eMBEntry.aspx?" + qs);
             }
         }

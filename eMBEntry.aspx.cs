@@ -78,7 +78,7 @@ namespace PHEDChhattisgarh
                 return;
 
             using (var cn = new SqlConnection(connectionString))
-            using (var cmd = new SqlCommand("SELECT parameters, units, expression FROM Formula WHERE formula_id=@id", cn))
+            using (var cmd = new SqlCommand("SELECT parameters, units, expression FROM [JJM].[dbo].[Formula] WHERE formula_id=@id", cn))
             {
                 cmd.Parameters.AddWithValue("@id", formulaId);
                 cn.Open();
@@ -91,12 +91,12 @@ namespace PHEDChhattisgarh
                         var serializer = new JavaScriptSerializer();
                         var paramInfos = serializer.Deserialize<List<ParamInfo>>(rawParams);
 
-                        var unitList = rdr["units"].ToString()
-                                        .Trim('[', ']')
-                                        .Replace("\"", "")
-                                        .Split(',')
-                                        .Select(u => u.Trim())
-                                        .ToList();
+                        string[] unitArray = rdr["units"].ToString().Trim('[', ']').Replace("\"", "").Split(',');
+                         var unitList = new List<string>();
+                                    foreach (string u in unitArray)
+                                    {
+                                        unitList.Add(u.Trim());
+                                    }
 
                         string formulaExpression = rdr["expression"].ToString();
                         int currentFormulaId = int.Parse(ddlFormula.SelectedValue);
@@ -188,7 +188,7 @@ namespace PHEDChhattisgarh
         {
             var dt = new DataTable();
             using (var cn = new SqlConnection(connectionString))
-            using (var cmd = new SqlCommand("SELECT formula_id, name, parameters, units FROM Formula", cn))
+            using (var cmd = new SqlCommand("SELECT formula_id, name, parameters, units FROM [JJM].[dbo].[Formula]", cn))
             using (var da = new SqlDataAdapter(cmd))
             {
                 da.Fill(dt);
@@ -219,45 +219,6 @@ namespace PHEDChhattisgarh
                    !string.IsNullOrEmpty(Request.QueryString["ComponentID"]);
         }
 
-        private void LoadWorkDetails()
-        {
-            string workCode = Request.QueryString["WorkCode"];
-            string agreementBy = Request.QueryString["AgreementBy"];
-            string yearOfAgreement = Request.QueryString["YearOfAgreement"];
-            string agreementNo = Request.QueryString["AgreementNo"];
-
-            // Get the name of work from database
-            using (SqlConnection conn = new SqlConnection(connectionString))
-            {
-                using (SqlCommand cmd = new SqlCommand())
-                {
-                    cmd.Connection = conn;
-                    cmd.CommandType = CommandType.Text;
-                    cmd.CommandText = @"SELECT Name_of_Work FROM eMB_REFERENCES 
-                                      WHERE Work_Code = @WorkCode 
-                                      AND Agreement_By = @AgreementBy 
-                                      AND Year_Of_Agreement = @YearOfAgreement 
-                                      AND Agreement_No = @AgreementNo";
-
-                    cmd.Parameters.AddWithValue("@WorkCode", workCode);
-                    cmd.Parameters.AddWithValue("@AgreementBy", agreementBy);
-                    cmd.Parameters.AddWithValue("@YearOfAgreement", yearOfAgreement);
-                    cmd.Parameters.AddWithValue("@AgreementNo", agreementNo);
-
-                    try
-                    {
-                        conn.Open();
-                        object result = cmd.ExecuteScalar();
-                    }
-                    catch (Exception ex)
-                    {
-                        // Log error
-                        System.Diagnostics.Debug.WriteLine("Error loading work details: " + ex.Message);
-                    }
-                }
-            }
-        }
-
         private void GenerateUniqueEmbID()
         {
             string workCode = Request.QueryString["WorkCode"] ?? "";
@@ -272,7 +233,7 @@ namespace PHEDChhattisgarh
 
             // 3) Compose the UniqueEmbID
             //    Format: <WorkCode>.<componentID>.(<SORItemNo>).<YYYYMMDD>.<HHMMSS>
-            string uniqueEmbID = string.Format("{0}.{1}.({2}).{3}.{4}", workCode, componentID, sorItemNo, dateStr, timeStr);
+            string uniqueEmbID = string.Format("{0}-{1}-({2})-{3}-{4}", workCode, componentID, sorItemNo, dateStr, timeStr);
 
             lblUniqueEmbID.Text = uniqueEmbID;
             hdnUniqueEmbID.Value = uniqueEmbID;
@@ -405,9 +366,12 @@ namespace PHEDChhattisgarh
             {
                 var serializer = new JavaScriptSerializer();
                 var dict = serializer.Deserialize<Dictionary<string, decimal>>(inputsJson);
-                return string.Join(", ",
-                    dict.Select(kv => string.Format("{0}={1}", kv.Key, kv.Value.ToString(CultureInfo.InvariantCulture)))
-                );
+                var formattedPairs = new List<string>();
+                foreach (var kv in dict)
+                {
+                    formattedPairs.Add(string.Format("{0}={1}", kv.Key, kv.Value.ToString(CultureInfo.InvariantCulture)));
+                }
+                return string.Join(", ", formattedPairs.ToArray());
             }
             catch
             {
@@ -423,7 +387,7 @@ namespace PHEDChhattisgarh
             try
             {
                 // Split by dots and get the second-to-last part (date part)
-                string[] parts = uniqueEmbID.Split('.');
+                string[] parts = uniqueEmbID.Split('-');
                 if (parts.Length >= 2)
                 {
                     string datePart = parts[parts.Length - 2]; // 20250521
@@ -453,7 +417,7 @@ namespace PHEDChhattisgarh
             try
             {
                 // Split by dots and get the last part (time part)
-                string[] parts = uniqueEmbID.Split('.');
+                string[] parts = uniqueEmbID.Split('-');
                 if (parts.Length >= 1)
                 {
                     string timePart = parts[parts.Length - 1]; // 164738
@@ -474,13 +438,11 @@ namespace PHEDChhattisgarh
 
             return "";
         }
-
         private static readonly object _syncLock = new object();
 
-
-        // Fixed btnSave_Click method
         protected void btnSave_Click(object sender, EventArgs e)
         {
+            // 1) Validation
             if (ddlFormula.SelectedIndex == 0)
             {
                 ScriptManager.RegisterStartupScript(this, GetType(), "alert",
@@ -539,7 +501,7 @@ namespace PHEDChhattisgarh
                         CultureInfo.InvariantCulture, out val))
                     {
                         ScriptManager.RegisterStartupScript(this, GetType(), "alert",
-                            "alert('Invalid value for parameter "+param+". Please enter a valid number.');", true);
+                            "alert('Invalid value for parameter " + param + ". Please enter a valid number.');", true);
                         return;
                     }
                     inputs[param] = val;
@@ -550,50 +512,88 @@ namespace PHEDChhattisgarh
             string expression;
             using (var cn = new SqlConnection(connectionString))
             using (var cmd = new SqlCommand(
-                "SELECT expression FROM Formula WHERE formula_id = @fid", cn))
+                "SELECT expression FROM [JJM].[dbo].[Formula] WHERE formula_id = @fid", cn))
             {
                 cmd.Parameters.AddWithValue("@fid", formulaId);
                 cn.Open();
-                expression = (string)cmd.ExecuteScalar();
+                string resp = (string)cmd.ExecuteScalar();
+                expression = resp;
             }
 
-            // replace pi, then each param as a whole word
-            string evalExpr = expression
-              .Replace("pi", Math.PI.ToString(CultureInfo.InvariantCulture));
+            // Replace pi with its value
+            string evalExpr = expression.Replace("pi", Math.PI.ToString(CultureInfo.InvariantCulture));
+
+            // Replace each parameter with its value
             foreach (var kv in inputs)
             {
-                string pat = @"\b" + Regex.Escape(kv.Key) + "\b";
+                string pat = @"\b" + Regex.Escape(kv.Key) + @"\b";
                 evalExpr = Regex.Replace(
                     evalExpr,
                     pat,
                     kv.Value.ToString(CultureInfo.InvariantCulture),
                     RegexOptions.CultureInvariant);
             }
-            // expand ^2
-            evalExpr = Regex.Replace(evalExpr,
-                @"(?<num>\d+(\.\d+)?)\s*\^\s*2",
-                m => { var n = m.Groups["num"].Value; return "(" + n + "*" + n + ")"; }
-            );
 
-            // evaluate via DataColumn
-            var table = new DataTable();
-            var calcCol = new DataColumn("Calc", typeof(double), evalExpr);
-            table.Columns.Add(calcCol);
-            var rowEval = table.NewRow();
-            table.Rows.Add(rowEval);
-            double raw = (double)rowEval["Calc"];
-            decimal resultValue = Convert.ToDecimal(raw, CultureInfo.InvariantCulture);
+            // 5) Calculate result
+            decimal resultValue;
+            decimal tempValue;
 
-            // show in read-only box
+            // Check if expression is just a number after substitution
+            if (decimal.TryParse(evalExpr, NumberStyles.Any, CultureInfo.InvariantCulture, out tempValue))
+            {
+                // Simple case: expression became just a number (like "L" -> "5.0")
+                resultValue = tempValue;
+            }
+            else
+            {
+                // Complex expression: needs mathematical evaluation
+                // Handle ^2 patterns first
+                while (evalExpr.Contains("^2"))
+                {
+                    Match match = Regex.Match(evalExpr, @"(?<num>\d+(\.\d+)?)\s*\^\s*2");
+                    if (match.Success)
+                    {
+                        string num = match.Groups["num"].Value;
+                        string replacement = "(" + num + "*" + num + ")";
+                        evalExpr = evalExpr.Replace(match.Value, replacement);
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+
+                try
+                {
+                    // Evaluate using DataColumn
+                    var table = new DataTable();
+                    var calcCol = new DataColumn("Calc", typeof(double), evalExpr);
+                    table.Columns.Add(calcCol);
+                    var rowEval = table.NewRow();
+                    table.Rows.Add(rowEval);
+                    double raw = (double)rowEval["Calc"];
+                    resultValue = Convert.ToDecimal(raw, CultureInfo.InvariantCulture);
+                }
+                catch (Exception ex)
+                {
+                    ScriptManager.RegisterStartupScript(this, GetType(), "alert",
+                        "alert('Error calculating formula: " + ex.Message.Replace("'", "\\'") + "');", true);
+                    return;
+                }
+            }
+
+            // Show result in textbox
             txtResult.Text = resultValue.ToString("0.######", CultureInfo.InvariantCulture);
 
-            // 5) Serialize inputs to JSON
-            string inputsJson = "{"
-                + string.Join(",", inputs.Select(kv =>
-                    "\"" + kv.Key + "\":" + kv.Value.ToString(CultureInfo.InvariantCulture) + ""))
-                + "}";
+            // 6) Serialize inputs to JSON (compatible way)
+            var jsonParts = new List<string>();
+            foreach (var kv in inputs)
+            {
+                jsonParts.Add("\"" + kv.Key + "\":" + kv.Value.ToString(CultureInfo.InvariantCulture));
+            }
+            string inputsJson = "{" + string.Join(",", jsonParts.ToArray()) + "}";
 
-            // 6) Your existing transaction / insert-or-update logic
+            // 7) Database transaction
             lock (_syncLock)
             {
                 using (var conn = new SqlConnection(connectionString))
@@ -603,15 +603,18 @@ namespace PHEDChhattisgarh
                     {
                         try
                         {
-                            using (var cmd = new SqlCommand { Connection = conn, Transaction = tx })
+                            using (var cmd = new SqlCommand())
                             {
+                                cmd.Connection = conn;
+                                cmd.Transaction = tx;
+
                                 if (isEditMode)
                                 {
-                                    // optimistic concurrency check
+                                    // Edit mode: optimistic concurrency check
                                     cmd.Parameters.Clear();
                                     cmd.CommandText = @"
                                 SELECT EntryGroupId, Revision, Version 
-                                FROM eMB_Entry 
+                                FROM [JJM].[dbo].[eMB_Entry] 
                                 WHERE EmbId = @EmbId AND IsCurrent = 1 AND Deleted = 0";
                                     cmd.Parameters.AddWithValue("@EmbId", hdnEditEmbId.Value);
 
@@ -640,7 +643,7 @@ namespace PHEDChhattisgarh
                                     // Update old record (use version for concurrency check)
                                     cmd.Parameters.Clear();
                                     cmd.CommandText = @"
-                                UPDATE eMB_Entry 
+                                UPDATE [JJM].[dbo].[eMB_Entry] 
                                 SET IsCurrent = 0 
                                 WHERE EmbId = @EmbId AND Version = @Version";
                                     cmd.Parameters.AddWithValue("@EmbId", hdnEditEmbId.Value);
@@ -655,7 +658,7 @@ namespace PHEDChhattisgarh
                                         return;
                                     }
 
-                                    // FIXED: Corrected INSERT statement for edit mode
+                                    // Insert new version
                                     cmd.Parameters.Clear();
                                     cmd.CommandText = @"
                                 INSERT INTO eMB_Entry (WorkCode, AgreementBy, YearOfAgreement, AgreementNo,
@@ -688,9 +691,8 @@ namespace PHEDChhattisgarh
                                 }
                                 else
                                 {
-                                    // uniqueness check
-                                    cmd.CommandText =
-                                      "SELECT COUNT(*) FROM eMB_Entry WHERE UniqueEmbID=@UniqueEmbID";
+                                    // New entry mode: uniqueness check
+                                    cmd.CommandText = "SELECT COUNT(*) FROM eMB_Entry WHERE UniqueEmbID=@UniqueEmbID";
                                     cmd.Parameters.AddWithValue("@UniqueEmbID", uniqueEmbID);
                                     if ((int)cmd.ExecuteScalar() > 0)
                                     {
@@ -700,7 +702,7 @@ namespace PHEDChhattisgarh
                                         return;
                                     }
 
-                                    // FIXED: Corrected INSERT statement for new entry
+                                    // Insert new entry
                                     cmd.Parameters.Clear();
                                     cmd.CommandText = @"
                                 INSERT INTO eMB_Entry
@@ -713,9 +715,8 @@ namespace PHEDChhattisgarh
                                     @ComponentID,@SORItemNo,@SORSubItem,
                                     @FormulaID,@Inputs,@ActualUnit,@ResultValue,
                                     @Remark,@UniqueEmbID,@Units,GETDATE(),0);
-                                SELECT CAST(SCOPE_IDENTITY() AS INT); ";
+                                SELECT CAST(SCOPE_IDENTITY() AS INT);";
 
-                                    // common parameters
                                     cmd.Parameters.AddWithValue("@WorkCode", workCode);
                                     cmd.Parameters.AddWithValue("@AgreementBy", agreementBy);
                                     cmd.Parameters.AddWithValue("@YearOfAgreement", yearOfAgreement);
@@ -733,11 +734,12 @@ namespace PHEDChhattisgarh
 
                                     int newEmbId = (int)cmd.ExecuteScalar();
 
+                                    // Update EntryGroupId
                                     cmd.Parameters.Clear();
                                     cmd.CommandText = @"
-                              UPDATE eMB_Entry
-                              SET EntryGroupId = @GroupId
-                              WHERE EmbId = @GroupId";
+                                UPDATE eMB_Entry
+                                SET EntryGroupId = @GroupId
+                                WHERE EmbId = @GroupId";
                                     cmd.Parameters.AddWithValue("@GroupId", newEmbId);
                                     cmd.ExecuteNonQuery();
                                 }
@@ -748,7 +750,6 @@ namespace PHEDChhattisgarh
                                     : "Entry saved successfully.";
                                 ScriptManager.RegisterStartupScript(this, GetType(), "alert",
                                     "alert('" + msg + "');", true);
-
                             }
                         }
                         catch (SqlException sx)
@@ -767,10 +768,12 @@ namespace PHEDChhattisgarh
                                 "alert('Error saving entry: " + ex.Message.Replace("'", "\\'") + "');", true);
                         }
                     }
+
                     LoadExistingEntries();
                     hdnEditEmbId.Value = "";
                 }
             }
+
             hdnUniqueEmbID.Value = "";
             GenerateUniqueEmbID();
         }
