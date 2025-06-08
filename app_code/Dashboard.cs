@@ -37,11 +37,11 @@ public class Dashboard
         }
         if (UserId.ToString().Trim().StartsWith("5"))
         {
-            sql2 = @"select b.isActive,isnull(cast(b.IsApproved as char),2) as IsApproved from SubDivisionMaster as a inner join SubEngineerMaster as b on a.subdivision_code=b.SubDivisionId where b.SubDivisionId=@UserId";
+            sql2 = @"select b.isActive,isnull(cast(b.IsApproved as char),2) as IsApproved from [JJM].[dbo].[Subdivision_master] as a inner join [JJM].[dbo].[SubEngineerMaster] as b on a.subdivision_code=b.SubDivisionId where b.SubDivisionId=@UserId";
         }
         else
         {
-            sql2 = @"select b.isActive,isnull(cast(b.IsApproved as char),2) as IsApproved  from DivisionMaster as a inner join SubEngineerMaster as b on a.division_code=b.DivisionId where 1=1 " + where + "";
+            sql2 = @"select b.isActive,isnull(cast(b.IsApproved as char),2) as IsApproved  from [JJM].[dbo].[division_master] as a inner join [JJM].[dbo].[SubEngineerMaster] as b on a.division_code=b.DivisionId where 1=1 " + where + "";
         }
         DashboardModel dashbaord = new DashboardModel();
         SubEngineer _SubEngineer = new SubEngineer();
@@ -64,12 +64,12 @@ public class Dashboard
         string sql3 = "";
         if (UserId.ToString().Trim().StartsWith("5"))
         {
-            sql3 = @"select distinct WorkCode from AssignedSchemes as a inner join SubDivisionMaster as b on a.AssignFrom=b.subdivision_code 
+            sql3 = @"select distinct WorkCode from [JJM].[dbo].[AssignedSchemes] as a inner join [JJM].[dbo].[Subdivision_master] as b on a.AssignFrom=b.subdivision_code 
             where IsRollBack=0 and b.subdivision_code=@UserId";
         }
         else
         {
-            sql3 = @"select distinct WorkCode from AssignedSchemes as a inner join SubDivisionMaster as b on a.AssignFrom=b.subdivision_code 
+            sql3 = @"select distinct WorkCode from [JJM].[dbo].[AssignedSchemes] as a inner join [JJM].[dbo].[Subdivision_master] as b on a.AssignFrom=b.subdivision_code 
             where IsRollBack=0 "+where+"";
         }
         DataTable dt3 = db.select_data(sql3, para);
@@ -84,19 +84,19 @@ public class Dashboard
         string sql4 = "";
         if (UserId.ToString().Trim().StartsWith("5"))
         {
-            sql4 = @"select distinct a.RequestNo,isnull(cast(StatusOfAE as char),2) as StatusOfAE,isnull(cast(StatusOfEE as char),2)  as StatusOfEE,isnull(Status,2) as Status  from eMBBookNoRequestMaster as a inner join
-            eMBBookNoRequestChild as b on a.RequestNo=b.RequestNo where a.IsRollBack=0 and (b.RequestFrom=@UserId or b.RequestTo=@UserId)";
+            sql4 = @"select distinct a.RequestNo,isnull(cast(StatusOfAE as char),2) as StatusOfAE,isnull(cast(StatusOfEE as char),2)  as StatusOfEE,isnull(Status,2) as Status  from [JJM].[dbo].[eMBBookNoRequestMaster] as a inner join
+            [JJM].[dbo].[eMBBookNoRequestChild] as b on a.RequestNo=b.RequestNo where a.IsRollBack=0 and (b.RequestFrom=@UserId or b.RequestTo=@UserId)";
         }
         else if (UserId.ToString().Trim().StartsWith("6"))
         {
-            sql4 = @"select distinct a.RequestNo,isnull(cast(StatusOfAE as char),2) as StatusOfAE,isnull(cast(StatusOfEE as char),2)  as StatusOfEE,isnull(Status,2) as Status  from eMBBookNoRequestMaster as a inner join
-            eMBBookNoRequestChild as b on a.RequestNo=b.RequestNo where a.IsRollBack=0  and b.RequestFrom=@UserId";
+            sql4 = @"select distinct a.RequestNo,isnull(cast(StatusOfAE as char),2) as StatusOfAE,isnull(cast(StatusOfEE as char),2)  as StatusOfEE,isnull(Status,2) as Status  from [JJM].[dbo].[eMBBookNoRequestMaster] as a inner join
+            [JJM].[dbo].[eMBBookNoRequestChild] as b on a.RequestNo=b.RequestNo where a.IsRollBack=0  and b.RequestFrom=@UserId";
         }
         else
         {
-            sql4 = @"select distinct a.RequestNo,isnull(cast(StatusOfAE as char),2) as StatusOfAE,isnull(cast(StatusOfEE as char),2)  as StatusOfEE,isnull(Status,2) as Status from eMBBookNoRequestMaster as a inner join
-            eMBBookNoRequestChild as b on a.RequestNo=b.RequestNo where a.IsRollBack=0 and (b.RequestFrom in(select division_code from DivisionMaster where 1=1 " + where + @")
-            or b.RequestTo in(select division_code from DivisionMaster where  1=1 " + where + "))";
+            sql4 = @"select distinct a.RequestNo,isnull(cast(StatusOfAE as char),2) as StatusOfAE,isnull(cast(StatusOfEE as char),2)  as StatusOfEE,isnull(Status,2) as Status from [JJM].[dbo].[eMBBookNoRequestMaster] as a inner join
+            [JJM].[dbo].[eMBBookNoRequestChild] as b on a.RequestNo=b.RequestNo where a.IsRollBack=0 and (b.RequestFrom in(select division_code from [JJM].[dbo].[division_master] where 1=1 " + where + @")
+            or b.RequestTo in(select division_code from [JJM].[dbo].[division_master] where  1=1 " + where + "))";
         }
         eMBRequestSB _eMBRequestSB = new eMBRequestSB();
         eMBRequestAE _eMBRequestAE = new eMBRequestAE();

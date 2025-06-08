@@ -49,13 +49,13 @@ public class Function
         }
         if (UserId.ToString().Trim().StartsWith("5"))
         {
-            sql = @"select distinct DistrictId,DistrictName from SubDivisionMaster as a inner join DistrictMaster as b on a.division_code=b.DivisionId 
+            sql = @"select distinct DistrictId,DistrictName from [JJM].[dbo].[Subdivision_master] as a inner join DistrictMaster as b on a.division_code=b.DivisionId 
             where subdivision_code=@UserId order by DistrictName asc";
             select = "NOSELECT";
         }
         else
         {
-            sql = @"select  distinct b.DistrictName,b.DistrictId  from DivisionMaster as a inner join DistrictMaster as b
+            sql = @"select  distinct b.DistrictName,b.DistrictId  from [JJM].[dbo].[division_master] as a inner join DistrictMaster as b
             on a.division_code=b.DivisionId where 1=1 " + where + " order by b.DistrictName asc";
         }
         db.fill_Dropdown_join(sql, "DistrictId", "DistrictName", select, ddl, para);
@@ -87,13 +87,13 @@ public class Function
         }
         if (UserId.ToString().Trim().StartsWith("5"))
         {
-            sql2 = @"select a.division_code,a.division_name from DivisionMaster as a inner join SubDivisionMaster as b
+            sql2 = @"select a.division_code,a.division_name from [JJM].[dbo].[division_master] as a inner join [JJM].[dbo].[Subdivision_master] as b
                 on a.division_code=b.division_code where subdivision_code=@UserId";
             select = "NOSELECT";
         }
         else
         {
-            sql2 = @"select a.division_code,a.division_name,circle_code,zone_code from DivisionMaster as a inner join DistrictMaster as b
+            sql2 = @"select a.division_code,a.division_name,circle_code,zone_code from [JJM].[dbo].[division_master] as a inner join DistrictMaster as b
                 on a.division_code=b.DivisionId where 1=1 " + where + "";
         }
         db.fill_Dropdown_join(sql2, "division_code", "division_name", select, ddl, para);
@@ -103,7 +103,7 @@ public class Function
         SqlParameter[] para = { 
                 new SqlParameter() { ParameterName = "@UserId", Value =UserId.ToString().Trim() }, 
             };
-        string sql = @"select distinct SubEngineerId, SubEngineerName from SubDivisionMaster as a1 inner join SubEngineerMaster as a2
+        string sql = @"select distinct SubEngineerId, SubEngineerName from [JJM].[dbo].[Subdivision_master] as a1 inner join SubEngineerMaster as a2
         on a1.subdivision_code=a2.SubDivisionId where a1.subdivision_code=@UserId order by SubEngineerName asc";
         db.fill_Dropdown_join(sql, "SubEngineerId", "SubEngineerName", "All Sub-Engineer", ddl, para);
     }

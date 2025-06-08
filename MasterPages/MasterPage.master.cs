@@ -36,7 +36,7 @@ public partial class MasterPages_MasterPage : System.Web.UI.MasterPage
         frmeMBBookRequestAE.Visible = false;
         frmeMBBookRequestEE.Visible = false;
         frmeMBEntry.Visible = false;
-        frmeMBTransfer.Visible = false;        
+        frmeMBTransfer.Visible = false;
         frmAssignedSchemesRollBack.Visible = false;
         //reports
         rptListOfSubEngineers.Visible = false;
