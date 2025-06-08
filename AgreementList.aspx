@@ -230,17 +230,12 @@
         </div>
 
         <div class="container">
-            <!-- Search Method Selection -->
-            <div class="search-tabs">
-                <div class="search-tab active" onclick="showSearchMethod('direct')" visible="false">Direct Search (Recommended)</div>
-            </div>
 
             <!-- Direct Search Form (Faster Method) -->
             <div id="directSearch" class="search-content active">
                 <div class="card mb-4">
                     <div class="card-header">
                         <h3><b>Direct Search (Type Book No & Work Code)</b></h3>
-                        <small class="text-muted">Fastest method - directly type the values you know</small>
                     </div>
                     <div class="card-body">
                         <div class="row">
@@ -335,7 +330,7 @@
             <!-- Work Codes List Panel (for when book is entered but work code is not) -->
             <asp:Panel ID="pnlWorkCodes" runat="server" Visible="false" CssClass="card mb-4">
                 <div class="card-header">
-                    <h4>Select Work Code</h4>
+                    <h3><b>Select Work Code</b></h3>
                 </div>
                 <div class="card-body">
                     <asp:GridView

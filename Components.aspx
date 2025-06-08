@@ -234,6 +234,27 @@ body {
     margin-bottom: 20px;
     border-left: 4px solid #0066cc;
 }
+.btn-uniform {
+    width: 150px !important; /* Adjust width as needed */
+    text-align: center;
+}
+.action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    align-items: center; /* Centers the buttons horizontally */
+    justify-content: center; /* Centers the buttons vertically */
+}
+
+.action-buttons .btn {
+    width: 140px; /* Fixed width for uniform buttons */
+    min-width: 140px;
+}
+
+.actions-column {
+    text-align: center !important;
+    vertical-align: middle !important;
+}
     </style>
 </head>
 <body>
@@ -325,22 +346,24 @@ body {
             HeaderStyle-HorizontalAlign="Center" 
             HeaderStyle-CssClass="text-center"/>
 
-        <asp:TemplateField HeaderText="Actions">
+        <asp:TemplateField HeaderText="Actions" ItemStyle-CssClass="actions-column" HeaderStyle-CssClass="text-center">
             <ItemTemplate>
-                <asp:LinkButton ID="btnViewComponents" runat="server" CommandName="ViewComponents" 
-                    CommandArgument='<%# Eval("Work_Code") + "," + Eval("AgreementBy") + "," + 
-                                        Eval("Year_Of_Agreement") + "," + Eval("Agreement_No") + "," + 
-                                        Eval("ComponentId") + "," + Eval("Amount") %>' 
-                    CssClass="btn btn-sm btn-primary" style="margin-right: 5px;">
-                    View Sub-Components
-                </asp:LinkButton>
-                
-                <asp:LinkButton ID="btnEnterProgress" runat="server" CommandName="EnterProgress" 
-                    CommandArgument='<%# Eval("ComponentId") + "#" + Eval("ComponentName") + "#" + 
-                                        Eval("AA_Quantity") + "#" + Eval("ComponentUnit") %>' 
-                    CssClass="btn btn-sm btn-success">
-                    Enter Progress
-                </asp:LinkButton>
+                <div class="action-buttons">
+                    <asp:LinkButton ID="btnViewComponents" runat="server" CommandName="ViewComponents" 
+                        CommandArgument='<%# Eval("Work_Code") + "," + Eval("AgreementBy") + "," + 
+                                            Eval("Year_Of_Agreement") + "," + Eval("Agreement_No") + "," + 
+                                            Eval("ComponentId") + "," + Eval("Amount") %>' 
+                        CssClass="btn btn-sm btn-primary">
+                        View Sub-Components
+                    </asp:LinkButton>
+            
+                    <asp:LinkButton ID="btnEnterProgress" runat="server" CommandName="EnterProgress" 
+                        CommandArgument='<%# Eval("ComponentId") + "#" + Eval("ComponentName") + "#" + 
+                                            Eval("AA_Quantity") + "#" + Eval("ComponentUnit") %>' 
+                        CssClass="btn btn-sm btn-success">
+                        Enter Progress
+                    </asp:LinkButton>
+                </div>
             </ItemTemplate>
         </asp:TemplateField>
     </Columns>

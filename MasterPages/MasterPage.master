@@ -288,7 +288,7 @@
                                         </a>
                                     </li> 
                                     <li id="frmeMBEntry" class="" runat="server">
-                                        <a href="../Forms/frmeMBEntry.aspx" class="waves-effect waves-dark">
+                                        <a href="../AgreementList.aspx" class="waves-effect waves-dark">
                                             <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
                                             <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">eMB Entry Form</span>
                                             <span class="pcoded-mcaret"></span>

@@ -10,7 +10,7 @@ namespace PHEDChhattisgarh
     public partial class ComponentList : System.Web.UI.Page
     {
         // Get connection string from web.config
-        private string connectionString = ConfigurationManager.ConnectionStrings["MyDbConnection"].ConnectionString;
+        private string connectionString = ConfigurationManager.ConnectionStrings["eMB"].ConnectionString;
         private string selectedComponentID = string.Empty;
 
         protected void Page_Load(object sender, EventArgs e)

@@ -181,7 +181,6 @@ namespace PHEDChhattisgarh
                 ViewState["By"] = dt.Rows[0]["AgreementBy"].ToString();
                 ViewState["No"] = dt.Rows[0]["Agreement_No"].ToString();
                 ViewState["Work"] = workCode;
-
                 btnViewComponents.Visible = true;
             }
             else
