@@ -299,7 +299,7 @@
                       <label class="col-sm-2 col-form-label">
                           SOR Sub-Item:
                       </label>
-                      <div class="col-sm-4">
+                      <div class="col-sm-12">
                         <asp:Label ID="lblSORItem" runat="server" CssClass="form-control-plaintext" />
                       </div>
                     </div>

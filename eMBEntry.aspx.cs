@@ -45,7 +45,7 @@ namespace PHEDChhattisgarh
                 string sorItemName = "";
                 using (var cn = new SqlConnection(connectionString))
                 using (var cmd = new SqlCommand(
-                    @"SELECT SORItem 
+                    @"SELECT SORSubItem 
                     FROM [JJM].[dbo].[eMB_ComponentMaterialsEntry]
                     WHERE Work_Code = @WorkCode
                     AND ComponentID = @ComponentID
@@ -295,7 +295,7 @@ namespace PHEDChhattisgarh
                                 cme.SORItem,
                                 cme.SORSubItem,
                                 cme.Qty
-                            FROM eMB_ProgressOfScheme p
+                            FROM [JJM].[dbo].[eMB_ProgressOfScheme] p
                             LEFT JOIN[JJM].[dbo].[Work_Master] w ON p.Work_Code = w.PKWorkCode
                             LEFT JOIN eMB_ComponentMaster cm
                                 ON cm.ComponentID = @ComponentID
@@ -477,7 +477,8 @@ namespace PHEDChhattisgarh
 
         private static readonly object _syncLock = new object();
 
-        // Modify the btnSave_Click method
+
+        // Fixed btnSave_Click method
         protected void btnSave_Click(object sender, EventArgs e)
         {
             if (ddlFormula.SelectedIndex == 0)
@@ -537,7 +538,9 @@ namespace PHEDChhattisgarh
                     if (!decimal.TryParse(stringValue, NumberStyles.Any,
                         CultureInfo.InvariantCulture, out val))
                     {
-                        // Show error
+                        ScriptManager.RegisterStartupScript(this, GetType(), "alert",
+                            "alert('Invalid value for parameter "+param+". Please enter a valid number.');", true);
+                        return;
                     }
                     inputs[param] = val;
                 }
@@ -559,7 +562,7 @@ namespace PHEDChhattisgarh
               .Replace("pi", Math.PI.ToString(CultureInfo.InvariantCulture));
             foreach (var kv in inputs)
             {
-                string pat = @"\b"+Regex.Escape(kv.Key)+"\b";
+                string pat = @"\b" + Regex.Escape(kv.Key) + "\b";
                 evalExpr = Regex.Replace(
                     evalExpr,
                     pat,
@@ -569,7 +572,7 @@ namespace PHEDChhattisgarh
             // expand ^2
             evalExpr = Regex.Replace(evalExpr,
                 @"(?<num>\d+(\.\d+)?)\s*\^\s*2",
-                m => { var n = m.Groups["num"].Value; return "("+n+"*"+n+")"; }
+                m => { var n = m.Groups["num"].Value; return "(" + n + "*" + n + ")"; }
             );
 
             // evaluate via DataColumn
@@ -587,7 +590,7 @@ namespace PHEDChhattisgarh
             // 5) Serialize inputs to JSON
             string inputsJson = "{"
                 + string.Join(",", inputs.Select(kv =>
-                    "\""+kv.Key+"\":"+kv.Value.ToString(CultureInfo.InvariantCulture)+""))
+                    "\"" + kv.Key + "\":" + kv.Value.ToString(CultureInfo.InvariantCulture) + ""))
                 + "}";
 
             // 6) Your existing transaction / insert-or-update logic
@@ -607,9 +610,9 @@ namespace PHEDChhattisgarh
                                     // optimistic concurrency check
                                     cmd.Parameters.Clear();
                                     cmd.CommandText = @"
-                                        SELECT EntryGroupId, Revision, Version 
-                                        FROM eMB_Entry 
-                                        WHERE EmbId = @EmbId AND IsCurrent = 1 AND Deleted = 0";
+                                SELECT EntryGroupId, Revision, Version 
+                                FROM eMB_Entry 
+                                WHERE EmbId = @EmbId AND IsCurrent = 1 AND Deleted = 0";
                                     cmd.Parameters.AddWithValue("@EmbId", hdnEditEmbId.Value);
 
                                     int entryGroupId, oldRevision;
@@ -637,9 +640,9 @@ namespace PHEDChhattisgarh
                                     // Update old record (use version for concurrency check)
                                     cmd.Parameters.Clear();
                                     cmd.CommandText = @"
-                                        UPDATE eMB_Entry 
-                                        SET IsCurrent = 0 
-                                        WHERE EmbId = @EmbId AND Version = @Version";
+                                UPDATE eMB_Entry 
+                                SET IsCurrent = 0 
+                                WHERE EmbId = @EmbId AND Version = @Version";
                                     cmd.Parameters.AddWithValue("@EmbId", hdnEditEmbId.Value);
                                     cmd.Parameters.AddWithValue("@Version", versionBytes);
 
@@ -652,24 +655,25 @@ namespace PHEDChhattisgarh
                                         return;
                                     }
 
+                                    // FIXED: Corrected INSERT statement for edit mode
                                     cmd.Parameters.Clear();
                                     cmd.CommandText = @"
-                                        INSERT INTO eMB_Entry (WorkCode, AgreementBy, YearOfAgreement, AgreementNo,
-                                            ComponentID, SORItemNo, SORSubItem,
-                                            FormulaID, Inputs, ActualUnit, ResultValue, Remark, UniqueEmbID, Units, [Date], 
-                                            Deleted, EntryGroupId, Revision, IsCurrent)
-                                        VALUES (@WorkCode, @AgreementBy, @YearOfAgreement, @AgreementNo,
-                                            @ComponentID, @sorno, @sorItemNo, @sorItem, @sorSubItem,
-                                            @FormulaID, @Inputs, @ActualUnit, @ResultValue, @Remark, @UniqueEmbID, @Units, 
-                                            GETDATE(), 0, @EntryGroupId, @Revision, 1)";
+                                INSERT INTO eMB_Entry (WorkCode, AgreementBy, YearOfAgreement, AgreementNo,
+                                    ComponentID, SORItemNo, SORSubItem,
+                                    FormulaID, Inputs, ActualUnit, ResultValue, Remark, UniqueEmbID, Units, [Date], 
+                                    Deleted, EntryGroupId, Revision, IsCurrent)
+                                VALUES (@WorkCode, @AgreementBy, @YearOfAgreement, @AgreementNo,
+                                    @ComponentID, @SORItemNo, @SORSubItem,
+                                    @FormulaID, @Inputs, @ActualUnit, @ResultValue, @Remark, @UniqueEmbID, @Units, 
+                                    GETDATE(), 0, @EntryGroupId, @Revision, 1)";
 
                                     cmd.Parameters.AddWithValue("@WorkCode", workCode);
                                     cmd.Parameters.AddWithValue("@AgreementBy", agreementBy);
                                     cmd.Parameters.AddWithValue("@YearOfAgreement", yearOfAgreement);
                                     cmd.Parameters.AddWithValue("@AgreementNo", agreementNo);
                                     cmd.Parameters.AddWithValue("@ComponentID", componentId);
-                                    cmd.Parameters.AddWithValue("@sorItemNo", sorItemNo);
-                                    cmd.Parameters.AddWithValue("@sorSubItem", sorSubItem);
+                                    cmd.Parameters.AddWithValue("@SORItemNo", sorItemNo);
+                                    cmd.Parameters.AddWithValue("@SORSubItem", sorSubItem ?? "");
                                     cmd.Parameters.AddWithValue("@FormulaID", formulaId);
                                     cmd.Parameters.AddWithValue("@Inputs", inputsJson);
                                     cmd.Parameters.AddWithValue("@ActualUnit", actualUnit);
@@ -696,21 +700,20 @@ namespace PHEDChhattisgarh
                                         return;
                                     }
 
+                                    // FIXED: Corrected INSERT statement for new entry
                                     cmd.Parameters.Clear();
                                     cmd.CommandText = @"
-                                        INSERT INTO eMB_Entry
-                                            (WorkCode,AgreementBy,YearOfAgreement,AgreementNo,
-                                            ComponentID,SORItemNo,
-                                            SORSubItem,
-                                            FormulaID,Inputs,ActualUnit,ResultValue,
-                                            Remark,UniqueEmbID,Units,[Date],Deleted)
-                                        VALUES
-                                            (@WorkCode,@AgreementBy,@YearOfAgreement,@AgreementNo,
-                                            @ComponentID,@sorItemNo,
-                                            @sorSubItem,
-                                            @FormulaID,@Inputs,@ActualUnit,@ResultValue,
-                                            @Remark,@UniqueEmbID,@Units,GETDATE(),0);
-                                        SELECT CAST(SCOPE_IDENTITY() AS INT); ";
+                                INSERT INTO eMB_Entry
+                                    (WorkCode,AgreementBy,YearOfAgreement,AgreementNo,
+                                    ComponentID,SORItemNo,SORSubItem,
+                                    FormulaID,Inputs,ActualUnit,ResultValue,
+                                    Remark,UniqueEmbID,Units,[Date],Deleted)
+                                VALUES
+                                    (@WorkCode,@AgreementBy,@YearOfAgreement,@AgreementNo,
+                                    @ComponentID,@SORItemNo,@SORSubItem,
+                                    @FormulaID,@Inputs,@ActualUnit,@ResultValue,
+                                    @Remark,@UniqueEmbID,@Units,GETDATE(),0);
+                                SELECT CAST(SCOPE_IDENTITY() AS INT); ";
 
                                     // common parameters
                                     cmd.Parameters.AddWithValue("@WorkCode", workCode);
@@ -718,8 +721,8 @@ namespace PHEDChhattisgarh
                                     cmd.Parameters.AddWithValue("@YearOfAgreement", yearOfAgreement);
                                     cmd.Parameters.AddWithValue("@AgreementNo", agreementNo);
                                     cmd.Parameters.AddWithValue("@ComponentID", componentId);
-                                    cmd.Parameters.AddWithValue("@sorItemNo", sorItemNo);
-                                    cmd.Parameters.AddWithValue("@sorSubItem", sorSubItem);
+                                    cmd.Parameters.AddWithValue("@SORItemNo", sorItemNo);
+                                    cmd.Parameters.AddWithValue("@SORSubItem", sorSubItem ?? "");
                                     cmd.Parameters.AddWithValue("@FormulaID", formulaId);
                                     cmd.Parameters.AddWithValue("@Inputs", inputsJson);
                                     cmd.Parameters.AddWithValue("@ActualUnit", actualUnit);
@@ -732,9 +735,9 @@ namespace PHEDChhattisgarh
 
                                     cmd.Parameters.Clear();
                                     cmd.CommandText = @"
-                                      UPDATE eMB_Entry
-                                      SET EntryGroupId = @GroupId
-                                      WHERE EmbId = @GroupId";
+                              UPDATE eMB_Entry
+                              SET EntryGroupId = @GroupId
+                              WHERE EmbId = @GroupId";
                                     cmd.Parameters.AddWithValue("@GroupId", newEmbId);
                                     cmd.ExecuteNonQuery();
                                 }
@@ -744,7 +747,7 @@ namespace PHEDChhattisgarh
                                     ? "Entry updated successfully."
                                     : "Entry saved successfully.";
                                 ScriptManager.RegisterStartupScript(this, GetType(), "alert",
-                                    "alert('"+msg+"');", true);
+                                    "alert('" + msg + "');", true);
 
                             }
                         }
@@ -753,15 +756,15 @@ namespace PHEDChhattisgarh
                             tx.Rollback();
                             var text = sx.Number == 1205
                                 ? "The system is busy. Please try again."
-                                : "Error saving entry: "+sx.Message.Replace("'", "\\'");
+                                : "Error saving entry: " + sx.Message.Replace("'", "\\'");
                             ScriptManager.RegisterStartupScript(this, GetType(), "alert",
-                                "alert('"+text+"');", true);
+                                "alert('" + text + "');", true);
                         }
                         catch (Exception ex)
                         {
                             tx.Rollback();
                             ScriptManager.RegisterStartupScript(this, GetType(), "alert",
-                                "alert('Error saving entry: "+ex.Message.Replace("'", "\\'")+"');", true);
+                                "alert('Error saving entry: " + ex.Message.Replace("'", "\\'") + "');", true);
                         }
                     }
                     LoadExistingEntries();
@@ -771,6 +774,7 @@ namespace PHEDChhattisgarh
             hdnUniqueEmbID.Value = "";
             GenerateUniqueEmbID();
         }
+
 
 
         protected void btnReset_Click(object sender, EventArgs e)
