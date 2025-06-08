@@ -1,0 +1,71 @@
+﻿ .GridView1
+ {
+     width:98%;
+     margin:0px 1% 0px 1%;
+ }
+ .GridView1 td:nth-child(1),
+ .GridView1 td:nth-child(2)
+ {
+     text-align:center;
+     width:5%;
+ }
+ .GridView1 td:nth-child(3),
+ .GridView1 td:nth-child(6)
+ {
+     text-align:center;
+     width:15%;
+ }
+ .GridView1 td:nth-child(4),
+ .GridView1 td:nth-child(7)
+ { 
+     text-align:center;
+     width:10%;
+ }
+ .GridView1 td
+ {
+     font-size:12px;
+ }
+ .GridView1 th
+ { 
+     background-color: #448aff !important;
+     color: #fff;
+     text-align:center;
+ }
+ .GridView1 td:nth-child(5)
+ { 
+     text-align:left;
+     width:30%;
+ }
+ 
+ 
+.GridView2 td:nth-child(1)
+{
+     text-align:center;
+     width:5%;
+ }
+ .GridView2 td:nth-child(3),
+ .GridView2 td:nth-child(2),
+ .GridView2 td:nth-child(5),
+ .GridView2 td:nth-child(6)
+ {
+     text-align:center;
+     width:15%;
+ } 
+ .GridView2 td
+ {
+     font-size:12px;
+ } 
+ .GridView2 td:nth-child(4)
+ { 
+     text-align:left;
+     width:30%;
+ }
+ .GridView2 th
+ { 
+     background-color: #11c15b !important;
+     color: #fff;
+     text-align:center;
+ } 
+ 
+ 
+  

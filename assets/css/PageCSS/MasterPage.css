@@ -1,0 +1,94 @@
+﻿.table1 td:nth-child(2),
+.table1 td:nth-child(4)
+ {
+     padding-left:5px;
+      color:#dc3741; 
+      font-size:14px;
+ }
+ .table1 td:nth-child(1),
+.table1 td:nth-child(3)
+ {
+    padding-left:5px;
+    color:#007bff;
+ }
+ .fixed-button
+{
+    display:none;
+}
+.asterisk
+{
+    color:Red;
+    padding-left:3px;
+}
+    #modal 
+    {
+        position: fixed;
+        top: 0;
+        left: 0;
+        background-color: black;
+        z-index: 99;
+        opacity: 0.8;
+        filter: alpha(opacity=80);
+        -moz-opacity: 0.8;
+        min-height: 100%;
+        width: 100%;
+    } 
+    .loading
+    {
+        font-family: Arial;
+        font-size: 10pt;
+        border: 5px solid #4A82BA;
+        width: 200px;
+        height: 80px;
+        position: fixed;
+        background-color: White;
+        z-index: 0;
+        margin-left:45%;
+        margin-top:230px;
+        color:#003165;
+    }
+    .table td, .table th {
+        padding: 3px;
+        border: 1px solid #d6dde1;
+    }  
+    .Last10
+    {
+        font-size:15px;
+        color:#ff5252; 
+        font-weight:bold;
+        margin-bottom:5px; 
+        margin-Top:10px; 
+    }
+    .Last10Label
+    {
+        margin-bottom:5px;
+        color:#448aff; 
+        font-weight:bold;
+    }
+    .Last10Approved
+    {
+        font-size:15px;
+        color:#28a745; 
+        font-weight:bold;
+        margin-bottom:5px;
+    }
+    .Last10LabelApproved
+    {
+        margin-bottom:5px;
+        color:#448aff; 
+        font-weight:bold;
+    }
+    
+.btn-sm 
+{
+    font-size:15px;
+}
+.form-label
+{
+   color: #37474f;
+   font-weight: 500;
+}
+.headerTitle
+{
+    color:White;font-size:16px;font-weight: 500;
+}  

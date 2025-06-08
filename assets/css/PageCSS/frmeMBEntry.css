@@ -1,0 +1,243 @@
+﻿ th,
+td 
+{
+    font-size:12px;
+    white-space: wrap; 
+  }
+ .GridView1
+ {
+     width:100%; 
+ }
+ .GridView1 td:nth-child(1) 
+ {
+     text-align:center;
+     width:5%;
+ }
+ .GridView1 td:nth-child(2),
+ .GridView1 td:nth-child(3),
+ .GridView1 td:nth-child(4),
+ .GridView1 td:nth-child(5)
+ {
+     text-align:center;
+     width:15%;
+ } 
+ .GridView1 td,
+ .GridView2 td
+ {
+     font-size:12px;
+ }
+ .GridView1 th,
+ .GridView2 th
+ { 
+     background-color: #f074ac !important;
+     color: #fff;
+     text-align:center;
+ }
+ .GridView1 td:nth-child(6)
+ { 
+     text-align:left;
+     width:35%;
+     white-space:nowrap;
+ }
+ 
+ 
+  .GridView2
+ { 
+     width:100%; 
+ }
+ .GridView2 td:nth-child(1) 
+ {
+     text-align:center;
+     width:5%;
+ } 
+ .GridView2 td:nth-child(3),
+ .GridView2 td:nth-child(4),
+ .GridView2 td:nth-child(5),
+ .GridView2 td:nth-child(6), 
+ .GridView2 td:nth-child(7) 
+ {
+     text-align:center;
+     width:10%;
+ }
+ 
+ .GridView2 td:nth-child(2) 
+ { white-space: nowrap;
+     text-align:left;
+     width:45%;
+ }
+ 
+ .GridView3
+ {
+    width:100%;
+ }
+
+ .GridView3 th 
+ { 
+     background-color: #1cc9a7 !important;
+     color: #fff;
+     text-align:left; 
+ }
+ .GridView3 td:nth-child(2),
+ .GridView3 td:nth-child(3),
+ .GridView3 td:nth-child(4),
+ .GridView3 td:nth-child(5),
+ .GridView3 td:nth-child(6) 
+ {
+     text-align:center;
+     width:10%;
+}
+ .GridView3 td:nth-child(7) 
+ { 
+     white-space: nowrap;
+     text-align:left;
+     width:45%;
+ }
+ .GridView3 td:nth-child(1) 
+ { 
+     text-align:left;
+     width:5%;
+ }
+ .GridView_1 th
+ { 
+     color: #fff; 
+     background-color: rgb(236, 75, 148);
+     font-size:14px;
+     font-weight:500;
+     text-align:center;
+ }
+ .GridView_1 td:nth-child(1) 
+ {
+     font-weight:500;
+     width:40%;
+ }
+ .GridView_1
+ {
+     width:100%;
+ }
+.GridView_1 td:nth-child(2) 
+ {
+     color: rgb(107, 5, 249);
+     width:60%;
+ }
+ .GridView_3 th 
+ {
+     background-color: #1cc9a7;
+     color: #FFF;  
+     font-size:12px;
+ }
+ .GridView_3 .td1
+ {
+     text-align:center;
+     color: #455a64;
+     font-weight:500;
+ }
+ .GridView_3 .td2
+ {
+     text-align:center;
+     color: #ff5252 !important;
+     font-weight:500;
+ }
+ .GridView_2
+ {
+     margin-bottom:0px;
+     padding-bottom:0px;
+ }
+ .GridView_4
+ {
+     margin-bottom:5px;
+    background-color: #7388fe;
+ }
+  .GridView_4 .td1
+ { 
+     width:40%;
+     color: #FFF;
+     font-weight:500;
+ }
+ .GridView_4 .td2
+ { 
+     width:60%;
+     color: #FFF;
+     font-weight:500;
+ }
+ .GridViewSubComponents th 
+ {
+     background-color:#a96efc;
+     color: #FFF;  
+     font-size:12px;
+ }
+ 
+ 
+ 
+ .accordian-title
+ {
+     font-weight:500;text-align:center; font-size:14px;/*color:#b014ff; */
+ }
+ .accordion-desc {
+    color: #222222;
+    padding: 0 4px 4px;
+}
+ .label label-inverse-primary
+ {
+    font-size:14px;
+    font-weight:500;
+ }
+ .label-danger
+ {
+     font-size:14px;
+ }
+.tab-icon i {
+    padding-right: 10px;
+}
+.tab-list {
+  text-align: center; 
+}
+
+.tab-list__item {
+  display: inline-block;
+  -webkit-transition: all 0.4s ease;
+  -o-transition: all 0.4s ease;
+  -moz-transition: all 0.4s ease;
+  transition: all 0.4s ease;
+  padding: 0px; 
+  width: 100%;
+}
+ 
+.tab-list__link {
+  font-weight: 500;
+  font-size: 15px;
+  color: #fff;
+  display: inline-block;
+  -webkit-border-radius: 22.5px;
+  -moz-border-radius: 22.5px;
+  border-radius: 22.5px;
+  background: #999;
+  width: 100%;
+  text-align: left;
+}
+ 
+.tab-list__link .step {
+  display: inline-block;
+  height: 45px;
+  width: 45px;
+  line-height: 45px;
+  text-align: center;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+  background: #666;
+  font-size: 18px;
+  margin-right: 10px;
+}
+
+.tab-list__link .desc {
+  text-transform: capitalize;
+  display: inline-block;
+}
+
+.tab-list .active .tab-list__link {
+  background: #448aff  ;
+}
+
+.tab-list .active .tab-list__link .step {
+  background: #3d6aff;
+}  

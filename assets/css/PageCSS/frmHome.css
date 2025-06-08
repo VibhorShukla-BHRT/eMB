@@ -1,0 +1,25 @@
+﻿.text-right
+{
+    color:White;
+    font-weight:500;
+}
+.text-right span
+{
+    font-size:14px;
+}
+.text-white
+{
+    font-size:13px; 
+    font-weight:500;
+    padding-left:0px;
+    padding-right:0px;
+}
+.title_dashboard
+{
+    text-transform:uppercase; 
+} 
+.col-3 
+{
+    padding-left:0px;
+    padding-right:10px;
+}

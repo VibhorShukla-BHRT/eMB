@@ -1,0 +1,423 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="MasterPage.master.cs" Inherits="PHEDChhattisgarh.MasterPages_MasterPage" %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>eMB PH.E.D</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <!-- Favicon icon -->
+    <link rel="icon" href="<%= Page.ResolveClientUrl("~/assets/images/favicon.ico") %>" type="image/x-icon">
+    <!-- Google font-->     <link href="https://fonts.googleapis.com/css?family=Roboto:400,500" rel="stylesheet">
+    <!-- Required Fremwork -->
+    <link rel="stylesheet" type="text/css" href="<%= Page.ResolveClientUrl("~/assets/css/bootstrap/css/bootstrap.min.css") %>">
+    <!-- waves.css -->
+    <link rel="stylesheet" href="<%= Page.ResolveClientUrl("~/assets/pages/waves/css/waves.min.css") %>" type="text/css" media="all">
+    <!-- themify-icons line icon -->
+    <link rel="stylesheet" type="text/css" href="<%= Page.ResolveClientUrl("~/assets/icon/themify-icons/themify-icons.css") %>">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" type="text/css" href="<%= Page.ResolveClientUrl("~/assets/icon/font-awesome/css/font-awesome.min.css") %>">
+    <!-- Style.css -->
+    <link rel="stylesheet" type="text/css" href="<%= Page.ResolveClientUrl("~/assets/css/style.css") %>">
+    <!-- ico font -->
+    <link rel="stylesheet" type="text/css" href="<%= Page.ResolveClientUrl("~/assets/icon/icofont/css/icofont.css") %>">
+    <link rel="stylesheet" type="text/css" href="<%= Page.ResolveClientUrl("~/assets/css/jquery.mCustomScrollbar.css") %>">
+    <link rel="stylesheet" type="text/css" href="<%= Page.ResolveClientUrl("~/assets/css/PageCSS/MasterPage.css") %>">
+    <asp:ContentPlaceHolder id="head" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+<form id="form1" runat="server">                                                   
+<asp:ScriptManager ID="ScriptManager1" runat="server">
+</asp:ScriptManager>
+<!-- Pre-loader start -->
+<div class="theme-loader">
+    <div class="loader-track">
+        <div class="preloader-wrapper">
+            <div class="spinner-layer spinner-blue">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div>
+                <div class="gap-patch">
+                    <div class="circle"></div>
+                </div>
+                <div class="circle-clipper right">
+                    <div class="circle"></div>
+                </div>
+            </div>
+            <div class="spinner-layer spinner-red">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div>
+                <div class="gap-patch">
+                    <div class="circle"></div>
+                </div>
+                <div class="circle-clipper right">
+                    <div class="circle"></div>
+                </div>
+            </div>
+            
+            <div class="spinner-layer spinner-yellow">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div>
+                <div class="gap-patch">
+                    <div class="circle"></div>
+                </div>
+                <div class="circle-clipper right">
+                    <div class="circle"></div>
+                </div>
+            </div>
+            
+            <div class="spinner-layer spinner-green">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div>
+                <div class="gap-patch">
+                    <div class="circle"></div>
+                </div>
+                <div class="circle-clipper right">
+                    <div class="circle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Pre-loader end -->
+<div id="pcoded" class="pcoded">
+    <div class="pcoded-overlay-box"></div>
+    <div class="pcoded-container navbar-wrapper">
+        <nav class="navbar header-navbar pcoded-header">
+            <div class="navbar-wrapper">
+                <div class="navbar-logo">
+                    <a class="mobile-menu waves-effect waves-light" id="mobile-collapse" href="#!">
+                        <i class="ti-menu"></i>
+                    </a>
+                    <div class="mobile-search waves-effect waves-light">
+                        <div class="header-search">
+                            <div class="main-search morphsearch-search">
+                                <div class="input-group">
+                                    <span class="input-group-addon search-close"><i class="ti-close"></i></span>
+                                    <input type="text" class="form-control" placeholder="Enter Keyword">
+                                    <span class="input-group-addon search-btn"><i class="ti-search"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="frmHome.aspx" style="font-size:20px;text-align:center;width:100%;text-transform:lowercase">
+                       e<span style="font-size:25px;text-transform:uppercase">MB</span>
+                    </a>
+                    <a class="mobile-options waves-effect waves-light">
+                        <i class="ti-more"></i>
+                    </a>
+                </div>
+            
+                <div class="navbar-container container-fluid">
+                    <ul class="nav-left">
+                        <li>
+                            <div class="sidebar_toggle"><a href="javascript:void(0)"><i class="ti-menu"></i></a></div>
+                        </li>
+                        <li>
+                            <a href="#!" onclick="javascript:toggleFullScreen()" class="waves-effect waves-light">
+                                <i class="ti-fullscreen"></i>
+                            </a>
+                        </li>
+                        <li class="header-search">
+                            <div class="headerTitle"> 
+                              Public Health Engineering Department,Chhattisgarh
+                            </div>
+                        </li>
+                    </ul>
+                    <ul class="nav-right">
+                        <li class="header-notification" style="display:none">
+                            <a href="#!" class="waves-effect waves-light">
+                                <i class="ti-bell"></i>
+                                <span class="badge bg-c-red"></span>
+                            </a>
+                            <ul class="show-notification">
+                                <li>
+                                    <h6>Notifications</h6>
+                                    <label class="label label-danger">New</label>
+                                </li> 
+                                <li class="waves-effect waves-light">
+                                    <div class="media">
+                                        <img class="d-flex align-self-center img-radius" src="<%= Page.ResolveClientUrl("~/assets/images/logo.png") %>" alt="Generic placeholder image">
+                                        <div class="media-body">
+                                            <h5 class="notification-user">Joseph William</h5>
+                                            <p class="notification-msg">Lorem ipsum dolor sit amet, consectetuer elit.</p>
+                                            <span class="notification-time">30 minutes ago</span>
+                                        </div>
+                                    </div>
+                                </li> 
+                            </ul>
+                        </li>
+                        <li class="user-profile header-notification">
+                            <a href="#!" class="waves-effect waves-light">
+                                <img src="<%= Page.ResolveClientUrl("~/assets/images/logo.png") %>" class="img-radius" alt="User-Profile-Image">
+                                <span  ID="UserName2" runat="server"> </span>
+                                <i class="ti-angle-down"></i>
+                            </a>
+                            <ul class="show-notification profile-notification">
+                                <li class="waves-effect waves-light">
+                                    <a href="Profile.aspx">
+                                        <i class="ti-user"></i> Profile
+                                    </a>
+                                </li>                                 
+                                <li class="waves-effect waves-light">
+                                    <a href="../logout.aspx">
+                                        <i class="ti-layout-sidebar-left"></i> Logout
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    
+        <div class="pcoded-main-container">
+            <div class="pcoded-wrapper">
+                <nav class="pcoded-navbar">
+                    <div class="sidebar_toggle"><a href="#"><i class="icon-close icons"></i></a></div>
+                    <div class="pcoded-inner-navbar main-menu">
+                        <div class="">
+                            <div class="main-menu-header">
+                                <img class="img-80 img-radius" src="<%= Page.ResolveClientUrl("~/assets/images/usericon.png") %>" alt="User-Profile-Image">
+                                <div class="user-details" ID="UserName3" runat="server">
+                                    
+                                </div>
+                            </div>
+                        
+                            <div class="main-menu-content">
+                                <ul>
+                                    <li class="more-details">
+                                        <a href="profile.aspx"><i class="ti-user"></i>View Profile</a>
+                                        <a href="../logout.aspx"><i class="ti-layout-sidebar-left"></i>Logout</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>  
+                        <%--<script>
+                            function getCurentFileName() {
+                                var pagePathName = window.location.pathname;
+                                page = pagePathName.substring(pagePathName.lastIndexOf("/") + 1);
+                                if (page == "") {
+                                    $(this).addClass('active');
+                                     class="pcoded-hasmenu active pcoded-trigger"
+                                }
+                            } 
+                        </script>--%>
+                        <div class="pcoded-navigation-label" data-i18n="nav.category.forms">Forms  &amp; Reports</div>
+                        <ul class="pcoded-item pcoded-left-item">      
+                            <li class="">
+                                 <a href="../forms/frmHome.aspx" class="waves-effect waves-dark">
+                                      <span class="pcoded-micon"><i class="ti-home"></i><b>D</b></span>
+                                      <span class="pcoded-mtext" data-i18n="nav.dash.main">Dashboard</span>
+                                      <span class="pcoded-mcaret"></span>
+                                  </a>
+                            </li>                      
+                            <li class="pcoded-hasmenu">
+                                <a href="javascript:void(0)" class="waves-effect waves-dark">
+                                    <span class="pcoded-micon"><i class="ti-layout-grid2-alt"></i></span>
+                                    <span class="pcoded-mtext"  data-i18n="nav.basic-components.main">Forms</span>
+                                    <span class="pcoded-mcaret"></span>
+                                </a>
+                                <ul class="pcoded-submenu">
+                                    <li id="frmCreateSubEngIdAE" class="" runat="server">
+                                        <a href="../Forms/frmCreateSubEngIdAE.aspx" class="waves-effect waves-dark">
+                                            <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                            <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Add Sub-Engineer</span>
+                                            <span class="pcoded-mcaret"></span>
+                                        </a>
+                                    </li> 
+                                    <li  id="frmCreateSubEngIdEE" class="" runat="server">
+                                        <a href="../Forms/frmCreateSubEngIdEE.aspx" class="waves-effect waves-dark">
+                                            <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                            <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Approve Sub-Engineer</span>
+                                            <span class="pcoded-mcaret"></span>
+                                        </a>
+                                    </li>                                     
+                                  <%--  <li  id="frmAssignSchemesEE" class=" ">
+                                        <a href="../Forms/frmAssignSchemesEE.aspx" class="waves-effect waves-dark">
+                                            <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                            <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Assign Schemes To Sub-Division</span>
+                                            <span class="pcoded-mcaret"></span>
+                                        </a>
+                                    </li>    --%>                           
+                                    <li  id="frmAssignSchemes" class="" runat="server">
+                                        <a href="../Forms/frmAssignSchemesAE.aspx" class="waves-effect waves-dark">
+                                            <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                            <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Assign Schemes To Sub-Engineer</span>
+                                            <span class="pcoded-mcaret"></span>
+                                        </a>
+                                    </li>    
+                                                                 
+                                    <li  id="frmeMBBookRequestSB" class="" runat="server">
+                                        <a href="../Forms/frmeMBBookRequestSB.aspx" class="waves-effect waves-dark">
+                                            <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                            <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Request For eMB Book</span>
+                                            <span class="pcoded-mcaret"></span>
+                                        </a>
+                                    </li>                              
+                                    <li  id="frmeMBBookRequestAE" class="" runat="server">
+                                        <a href="../Forms/frmeMBBookRequestAE.aspx" class="waves-effect waves-dark">
+                                            <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                            <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Approve eMB Book Request</span>
+                                            <span class="pcoded-mcaret"></span>
+                                        </a>
+                                    </li>                              
+                                    <li id="frmeMBBookRequestEE" class="" runat="server">
+                                        <a href="../Forms/frmeMBBookRequestEE.aspx" class="waves-effect waves-dark">
+                                            <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                            <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Approve eMB Book Request</span>
+                                            <span class="pcoded-mcaret"></span>
+                                        </a>
+                                    </li>                             
+                                    <li id="frmeMBTransfer" class="" runat="server">
+                                        <a href="../Forms/frmeMBTransfer.aspx" class="waves-effect waves-dark">
+                                            <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                            <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Transfer eMB Book</span>
+                                            <span class="pcoded-mcaret"></span>
+                                        </a>
+                                    </li> 
+                                                           
+                                    <li  id="frmAssignedSchemesRollBack" class="" runat="server">
+                                        <a href="../Forms/frmAssignedSchemesRollBack.aspx" class="waves-effect waves-dark">
+                                            <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                            <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">RollBack Assigned Schemes</span>
+                                            <span class="pcoded-mcaret"></span>
+                                        </a>
+                                    </li> 
+                                    <li id="frmeMBEntry" class="" runat="server">
+                                        <a href="../Forms/frmeMBEntry.aspx" class="waves-effect waves-dark">
+                                            <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                            <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">eMB Entry Form</span>
+                                            <span class="pcoded-mcaret"></span>
+                                        </a>
+                                    </li> 
+                                    
+                                </ul>
+                            </li> 
+
+                            <li class="pcoded-hasmenu">
+                                <a href="javascript:void(0)" class="waves-effect waves-dark">
+                                    <span class="pcoded-micon"><i class="ti-layout-grid2-alt"></i></span>
+                                    <span class="pcoded-mtext"  data-i18n="nav.basic-components.main">Reports</span>
+                                    <span class="pcoded-mcaret"></span>
+                                </a>
+                                <ul class="pcoded-submenu">                                                              
+                                    <li  id="rptListOfSubEngineers" class=""  runat="server">
+                                        <a href="../Reports/rptListOfSubEngineers.aspx" class="waves-effect waves-dark">
+                                            <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                            <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">List Of Sub-Engineers</span>
+                                            <span class="pcoded-mcaret"></span>
+                                        </a>
+                                    </li>                                                           
+                                    <li  id="AssignSchemesRpt" class=""  runat="server">
+                                        <a href="../Reports/AssignSchemesRpt.aspx" class="waves-effect waves-dark">
+                                            <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                            <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Assigned Schemes Report</span>
+                                            <span class="pcoded-mcaret"></span>
+                                        </a>
+                                    </li> 
+                                </ul>
+                            </li>
+                        </ul> 
+                    
+                        <div class="pcoded-navigation-label" data-i18n="nav.category.other">Other</div> 
+                        <ul class="pcoded-item pcoded-left-item">
+                            <li class="">
+                                 <a href="rptProfile.aspx" class="waves-effect waves-dark">
+                                      <span class="pcoded-micon"><i class="ti-user"></i><b>D</b></span>
+                                      <span class="pcoded-mtext" data-i18n="nav.dash.main">Profile</span>
+                                      <span class="pcoded-mcaret"></span>
+                                  </a>
+                            </li>
+                            <li class="">
+                                 <a href="frmChangePassword.aspx" class="waves-effect waves-dark">
+                                      <span class="pcoded-micon"><i class="ti-key"></i><b>D</b></span>
+                                      <span class="pcoded-mtext" data-i18n="nav.dash.main">Change Password</span>
+                                      <span class="pcoded-mcaret"></span>
+                                  </a>
+                            </li>
+                            <li class="">
+                                 <a href="../Logout.aspx" class="waves-effect waves-dark">
+                                      <span class="pcoded-micon"><i class="ti-lock"></i><b>D</b></span>
+                                      <span class="pcoded-mtext" data-i18n="nav.dash.main">Logout</span>
+                                      <span class="pcoded-mcaret"></span>
+                                  </a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+                <div class="pcoded-content">
+                    <!-- Page-header start -->
+                    <div class="page-header">
+                        <div class="page-block">
+                            <div class="row align-items-center">
+                            
+                                <div class="col-md-8">
+                                    <div class="page-header-title">
+                                        <h5>
+                                            <asp:ContentPlaceHolder id="TitleContent" runat="server">
+                                            </asp:ContentPlaceHolder>
+                                        </h5>
+                                      <%--   class="m-b-10"<p class="m-b-0">(Public Health Engineering Department,Chhattisgarh)</p>--%>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <asp:ContentPlaceHolder id="BreadcrumbContent" runat="server">                                        
+                                    </asp:ContentPlaceHolder> 
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Page-header end -->
+                    <div class="pcoded-inner-content">
+                        <div class="main-body">
+                            <div class="page-wrapper">
+                                <asp:ContentPlaceHolder id="MainContent" runat="server">
+                                </asp:ContentPlaceHolder>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="styleSelector">
+                
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Required Jquery -->
+<script type="text/javascript" src="<%= Page.ResolveClientUrl("~/assets/js/jquery/jquery.min.js") %>"></script>     
+<script type="text/javascript" src="<%= Page.ResolveClientUrl("~/assets/js/jquery-ui/jquery-ui.min.js") %>"></script>     
+<script type="text/javascript" src="<%= Page.ResolveClientUrl("~/assets/js/popper.js/popper.min.js") %>"></script>     
+<script type="text/javascript" src="<%= Page.ResolveClientUrl("~/assets/js/bootstrap/js/bootstrap.min.js") %>"></script>
+<!-- waves js -->
+<script src="<%= Page.ResolveClientUrl("~/assets/pages/waves/js/waves.min.js") %>"></script>
+<!-- jquery slimscroll js -->
+<script type="text/javascript" src="<%= Page.ResolveClientUrl("~/assets/js/jquery-slimscroll/jquery.slimscroll.js") %>"></script>
+<!-- modernizr js -->
+<script type="text/javascript" src="<%= Page.ResolveClientUrl("~/assets/js/SmoothScroll.js") %>"></script>     
+<script src="<%= Page.ResolveClientUrl("~/assets/js/jquery.mCustomScrollbar.concat.min.js") %>"></script>
+<script src="<%= Page.ResolveClientUrl("~/assets/js/pcoded.min.js") %>"></script>
+<script src="<%= Page.ResolveClientUrl("~/assets/js/vertical-layout.min.js") %>"></script>
+<script src="<%= Page.ResolveClientUrl("~/assets/js/jquery.mCustomScrollbar.concat.min.js") %>"></script>
+<!-- Custom js -->
+<script type="text/javascript" src="<%= Page.ResolveClientUrl("~/assets/js/script.js") %>"></script>
+<script type="text/javascript" src="<%= Page.ResolveClientUrl("~/assets/js/sweetalert2@11.js") %>"></script>    
+ 
+<link rel="stylesheet" type="text/css" href="<%= Page.ResolveClientUrl("~/assets/datepicker/font-awesome.min.css") %>">
+<link rel="stylesheet" type="text/css" href="<%= Page.ResolveClientUrl("~/assets/datepicker/jquery-ui.css") %>">  
+<script type="text/javascript" src="<%= Page.ResolveClientUrl("~/assets/datepicker/jquery-ui.js") %>"></script>  
+<script type="text/javascript" src="<%= Page.ResolveClientUrl("~/assets/js/MasterJS.js") %>"></script>   
+ 
+</form>
+</body> 
+</html>
+
+
+
+

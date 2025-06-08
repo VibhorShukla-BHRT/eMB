@@ -1,0 +1,83 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="LoginMaster.master.cs" Inherits="PHEDChhattisgarh.LoginMaster" %>
+<!DOCTYPE html>
+<html lang="en">
+    <head id="Head1" runat="server">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+   <title>eMB PH.E.D</title>
+    <link rel="stylesheet" href="<%= Page.ResolveClientUrl("~/assets/login/vendor/%40fortawesome/fontawesome-free/css/all.min.css") %>">
+    <link rel="stylesheet" href="<%= Page.ResolveClientUrl("~/assets/login/stylesheets/theme.min.css") %>" data-skin="default">
+    <link rel="stylesheet" href="<%= Page.ResolveClientUrl("~/assets/login/stylesheets/theme-dark.min.css") %>" data-skin="dark">
+    <script>
+        var skin = localStorage.getItem('skin') || 'default';
+        var disabledSkinStylesheet = document.querySelector('link[data-skin]:not([data-skin="' + skin + '"])');
+        // Disable unused skin immediately
+        disabledSkinStylesheet.setAttribute('rel', '');
+        disabledSkinStylesheet.setAttribute('disabled', true);
+        // add loading class to html immediately
+        document.querySelector('html').classList.add('loading');
+    </script>
+    <asp:ContentPlaceHolder id="head" runat="server">
+    </asp:ContentPlaceHolder>
+  </head>
+  <body> 
+  <form id="Form1" runat="server" >
+    <asp:ScriptManager ID="ScriptManager1" runat="server">
+    </asp:ScriptManager>
+    <main class="auth">
+      <header id="auth-header" class="auth-header" style="padding-bottom:4rem;padding-top: 2rem;"  >
+        <center>
+          <img src="<%= Page.ResolveClientUrl("~/assets/images/cglogo.png") %>"  style="height:80px;margin-bottom:10px" class="img-thumbnail"/>
+        </center>
+        <h4> 
+        Public Health Engineering Department,Chattisgarh 
+        </h4> 
+        </header>
+        <div  class="auth-form" style="background-color: #f1f4f5;padding-top:10px;">     
+            <center class="eMB"> eMB - Login Panel</center>
+            <hr class="hr-eMB"/>
+            <asp:ContentPlaceHolder id="ContentPlaceHolder1" runat="server">
+            </asp:ContentPlaceHolder>      
+        </div>
+      <footer class="auth-footer">  
+      </footer>
+    </main>
+    </form>    
+    <script src="<%= Page.ResolveClientUrl("~/assets/login/vendor/jquery/jquery.min.js") %>"></script>
+    <script src="<%= Page.ResolveClientUrl("~/assets/login/javascript/theme.min.js") %>"></script>     
+    <script type="text/javascript" src="<%= Page.ResolveClientUrl("~/assets/js/sweetalert2@11.js") %>"></script>    
+    <script src="<%= Page.ResolveClientUrl("~/assets/js/sha256.js") %>"></script>
+    <style type="text/css">
+.form-control
+{
+    background-color:White;
+    color:Black;
+}
+.eMB
+{
+    text-align: center; 
+    font-size:20px;
+    background: linear-gradient(to left,violet,
+    indigo, blue, green, brown, orange, red);
+    -webkit-background-clip: text;
+    color: transparent;
+    padding-bottom:10px;
+    font-weight:bold;
+}
+ .hr-eMB {
+        border: 0;
+        height: 2px;
+        background: #333;
+        background-image: linear-gradient(to right, #ccc, #333, #ccc);
+        margin:5px 0 15px 0;
+    }
+</style>
+  </body> 
+</html>
+
+ 
+    
+    
+ 
+
+   

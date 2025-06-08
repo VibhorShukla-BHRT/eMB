@@ -1,0 +1,44 @@
+﻿  .eMBLogin
+    {
+        text-align: center; font-size:25px;
+    		background: linear-gradient(to left,violet,
+            indigo, blue, green, brown, orange, red);
+    		-webkit-background-clip: text;
+    		color: transparent;
+    }
+    .hr-eMB {
+        border: 0;
+        height: 1px;
+        background: #333;
+        background-image: linear-gradient(to right, #ccc, #333, #ccc);
+        margin:25px 0 5px 0;
+    }
+    .imgCaptcha
+    {
+        float:left;
+        margin-bottom:3px;
+        margin-left:10px;
+        width:120px;
+    }
+    .btnRefresh
+    {
+        float:left;
+        margin-left:10px;
+        width:40px;
+        height:40px;
+        border:none;
+    }
+    .UP1
+    {
+        marign:0px;
+        float:left;
+        width:100%;
+    }
+    .forgot
+    {
+        float:right; font-size:14px; font-weight:bold;color:#1ABC9C;
+    }
+    .forgot:hover
+    {
+        color:#E74C3C;
+    }

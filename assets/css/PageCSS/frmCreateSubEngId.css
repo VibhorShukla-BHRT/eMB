@@ -1,0 +1,23 @@
+﻿    .GridView1 td, 
+    .GridView1 th 
+    {
+        text-align:center;
+    }
+    .GridView1 th
+    {
+        background-color: #448aff !important;
+        color: #fff;
+    }
+    
+    
+    .GridView2 td, 
+    .GridView2 th 
+    {
+        text-align:center;
+    }
+    .GridView2 th
+    {
+        background-color: #11c15b !important;
+        color: #fff;
+     }
+    
