@@ -27,6 +27,10 @@ namespace PHEDChhattisgarh
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (Session["UserId"] == null)
+            {
+                Response.Redirect("Login.aspx");
+            }
             if (ddlFormula.SelectedIndex > 0)
                 RebuildParameterInputs();
 
@@ -468,6 +472,7 @@ namespace PHEDChhattisgarh
             string sorItem = lblSORItem.Text;
             string uniqueEmbID = hdnUniqueEmbID.Value;
             string remarks = txtRemarks.Text;
+            string userId = Session["UserId"] != null ? Session["UserId"].ToString() : null;
 
             int formulaId = int.Parse(ddlFormula.SelectedValue);
             string actualUnit = ddlUnit.SelectedValue;
@@ -664,11 +669,11 @@ namespace PHEDChhattisgarh
                                 INSERT INTO eMB_Entry (WorkCode, AgreementBy, YearOfAgreement, AgreementNo,
                                     ComponentID, SORItemNo, SORSubItem,
                                     FormulaID, Inputs, ActualUnit, ResultValue, Remark, UniqueEmbID, Units, [Date], 
-                                    Deleted, EntryGroupId, Revision, IsCurrent)
+                                    Deleted, EntryGroupId, Revision, IsCurrent, userId)
                                 VALUES (@WorkCode, @AgreementBy, @YearOfAgreement, @AgreementNo,
                                     @ComponentID, @SORItemNo, @SORSubItem,
                                     @FormulaID, @Inputs, @ActualUnit, @ResultValue, @Remark, @UniqueEmbID, @Units, 
-                                    GETDATE(), 0, @EntryGroupId, @Revision, 1)";
+                                    GETDATE(), 0, @EntryGroupId, @Revision, 1, @userId)";
 
                                     cmd.Parameters.AddWithValue("@WorkCode", workCode);
                                     cmd.Parameters.AddWithValue("@AgreementBy", agreementBy);
@@ -685,6 +690,7 @@ namespace PHEDChhattisgarh
                                     cmd.Parameters.AddWithValue("@UniqueEmbID", uniqueEmbID);
                                     cmd.Parameters.AddWithValue("@Units", actualUnit);
                                     cmd.Parameters.AddWithValue("@EntryGroupId", entryGroupId);
+                                    cmd.Parameters.AddWithValue("@userId", userId);
                                     cmd.Parameters.AddWithValue("@Revision", oldRevision + 1);
 
                                     cmd.ExecuteNonQuery();
@@ -709,12 +715,12 @@ namespace PHEDChhattisgarh
                                     (WorkCode,AgreementBy,YearOfAgreement,AgreementNo,
                                     ComponentID,SORItemNo,SORSubItem,
                                     FormulaID,Inputs,ActualUnit,ResultValue,
-                                    Remark,UniqueEmbID,Units,[Date],Deleted)
+                                    Remark,UniqueEmbID,Units,[Date],Deleted,userId)
                                 VALUES
                                     (@WorkCode,@AgreementBy,@YearOfAgreement,@AgreementNo,
                                     @ComponentID,@SORItemNo,@SORSubItem,
                                     @FormulaID,@Inputs,@ActualUnit,@ResultValue,
-                                    @Remark,@UniqueEmbID,@Units,GETDATE(),0);
+                                    @Remark,@UniqueEmbID,@Units,GETDATE(),0,@userId);
                                 SELECT CAST(SCOPE_IDENTITY() AS INT);";
 
                                     cmd.Parameters.AddWithValue("@WorkCode", workCode);
@@ -731,6 +737,7 @@ namespace PHEDChhattisgarh
                                     cmd.Parameters.AddWithValue("@Remark", remarks);
                                     cmd.Parameters.AddWithValue("@UniqueEmbID", uniqueEmbID);
                                     cmd.Parameters.AddWithValue("@Units", actualUnit);
+                                    cmd.Parameters.AddWithValue("@userId", userId);
 
                                     int newEmbId = (int)cmd.ExecuteScalar();
 

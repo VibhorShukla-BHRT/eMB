@@ -13,6 +13,10 @@ namespace PHEDChhattisgarh
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (Session["UserId"] == null)
+            {
+                Response.Redirect("Login.aspx");
+            }
             if (!IsPostBack)
             {
                 if (!ValidateQueryParams())
@@ -231,11 +235,12 @@ namespace PHEDChhattisgarh
             {
                 try
                 {
+                    string userId = Session["UserId"] != null ? Session["UserId"].ToString() : null;
                     using (SqlConnection conn = new SqlConnection(connectionString))
                     {
                         string query = @"INSERT INTO [JJM].[dbo].[SourceAvailabilitySurvey] 
-                        (WorkCode, AgreementBy, YearOfAgreement, AgreementNo, ComponentID, SourceAvailable, EntryDate)
-                        VALUES (@WorkCode, @AgreementBy, @YearOfAgreement, @AgreementNo, @ComponentID, @SourceAvailable, @EntryDate)";
+                        (WorkCode, AgreementBy, YearOfAgreement, AgreementNo, ComponentID, SourceAvailable, EntryDate, userId)
+                        VALUES (@WorkCode, @AgreementBy, @YearOfAgreement, @AgreementNo, @ComponentID, @SourceAvailable, @EntryDate, @userId)";
 
                         using (SqlCommand cmd = new SqlCommand(query, conn))
                         {
@@ -246,6 +251,7 @@ namespace PHEDChhattisgarh
                             cmd.Parameters.AddWithValue("@ComponentID", Convert.ToInt32(lblComponentId.Text));
                             cmd.Parameters.AddWithValue("@SourceAvailable", ddlSourceAvailable.SelectedValue);
                             cmd.Parameters.AddWithValue("@EntryDate", DateTime.Now);
+                            cmd.Parameters.AddWithValue("@userId", userId);
 
                             conn.Open();
                             int result = cmd.ExecuteNonQuery();
@@ -289,11 +295,12 @@ namespace PHEDChhattisgarh
             {
                 try
                 {
+                    string userId = Session["UserId"] != null ? Session["UserId"].ToString() : null;
                     using (SqlConnection conn = new SqlConnection(connectionString))
                     {
                         string query = @"INSERT INTO [JJM].[dbo].[CSEBSurvey] 
-                        (WorkCode, AgreementBy, YearOfAgreement, AgreementNo, ComponentID, CSEBStatus, EntryDate)
-                        VALUES (@WorkCode, @AgreementBy, @YearOfAgreement, @AgreementNo, @ComponentID, @CSEBStatus, @EntryDate)";
+                        (WorkCode, AgreementBy, YearOfAgreement, AgreementNo, ComponentID, CSEBStatus, EntryDate,userId)
+                        VALUES (@WorkCode, @AgreementBy, @YearOfAgreement, @AgreementNo, @ComponentID, @CSEBStatus, @EntryDate, @userId)";
 
                         using (SqlCommand cmd = new SqlCommand(query, conn))
                         {
@@ -304,6 +311,7 @@ namespace PHEDChhattisgarh
                             cmd.Parameters.AddWithValue("@ComponentID", Convert.ToInt32(lblComponentId.Text));
                             cmd.Parameters.AddWithValue("@CSEBStatus", ddlCSEBStatus.SelectedValue);
                             cmd.Parameters.AddWithValue("@EntryDate", DateTime.Now);
+                            cmd.Parameters.AddWithValue("@userId",userId);
 
                             conn.Open();
                             int result = cmd.ExecuteNonQuery();
@@ -386,12 +394,12 @@ namespace PHEDChhattisgarh
                             "alert('Calculated progress exceeds 100%. Please check your input values.');", true);
                         return;
                     }
-
+                    string userId = Session["UserId"] != null ? Session["UserId"].ToString() : null;
                     using (SqlConnection conn = new SqlConnection(connectionString))
                     {
                         string query = @"INSERT INTO [JJM].[dbo].[componentPhysicalProgress] 
-                (WorkCode, AgreementBy, YearOfAgreement, AgreementNo, ComponentID, Percentage, Qty, EntryDate)
-                VALUES (@WorkCode, @AgreementBy, @YearOfAgreement, @AgreementNo, @ComponentID, @Percentage, @Qty, @EntryDate)";
+                (WorkCode, AgreementBy, YearOfAgreement, AgreementNo, ComponentID, Percentage, Qty, EntryDate,userId)
+                VALUES (@WorkCode, @AgreementBy, @YearOfAgreement, @AgreementNo, @ComponentID, @Percentage, @Qty, @EntryDate,@userId)";
 
                         using (SqlCommand cmd = new SqlCommand(query, conn))
                         {
@@ -403,6 +411,7 @@ namespace PHEDChhattisgarh
                             cmd.Parameters.AddWithValue("@Percentage", percentage);
                             cmd.Parameters.AddWithValue("@Qty", completedQty);
                             cmd.Parameters.AddWithValue("@EntryDate", DateTime.Now);
+                            cmd.Parameters.AddWithValue("@userId", userId);
 
                             conn.Open();
                             int result = cmd.ExecuteNonQuery();

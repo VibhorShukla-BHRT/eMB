@@ -18,6 +18,10 @@ namespace PHEDChhattisgarh
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (Session["UserId"] == null)
+            {
+                Response.Redirect("Login.aspx");
+            }
             if (!IsPostBack)
             {
                 pnlResults.Visible = false;
@@ -248,6 +252,10 @@ namespace PHEDChhattisgarh
                 gvWorkCodes.DataBind();
                 pnlWorkCodes.Visible = true;
             }
+        }
+        protected void btnPrevious_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("./Forms/frmHome.aspx");
         }
 
         protected void btnViewComponents_Click(object sender, EventArgs e)

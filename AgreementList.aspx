@@ -6,6 +6,58 @@
     <title>Agreement List - PHED Chhattisgarh</title>
     <link href="Content/bootstrap.min.css" rel="stylesheet" />
     <style>
+        .floating-button-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px; /* Changed from left to right for better placement */
+    z-index: 1000;
+}
+
+.floating-button {
+    background-color: #0066cc; /* Using your primary color instead of secondary */
+    color: white;
+    border: none;
+    border-radius: 50px; /* More rounded for a modern look */
+    padding: 12px 24px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.floating-button:hover {
+    background-color: #004d99; /* Darker shade of your primary color */
+    transform: translateY(-2px); /* Slight lift effect on hover */
+    box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+}
+
+/* Optional: Add an icon before the text */
+.floating-button::before {
+    content: "←";
+    font-size: 18px;
+}
+.btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+.btn-success:hover {
+    background-color: #218838;
+    border-color: #1e7e34;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+    border-color: #545b62;
+}
         .progress-container {
             padding: 10px 0px;
             max-width: 100%;
@@ -200,7 +252,6 @@
         <div class="header">
             <h2>Public Health Engineering Department Govt. Of Chhattisgarh</h2>
         </div>
-
         <div class="progress-container">
             <div class="stepper-wrapper">
                 <div class="stepper-item completed" id="step1">
@@ -393,8 +444,10 @@
                 </div>
             </asp:Panel>
         </div>
+        <div class="floating-button-container">
+            <asp:Button ID="btnPrevious" runat="server" Text="Home" CssClass="btn btn-primary floating-button" OnClick="btnPrevious_Click" />
+        </div>
     </form>
-
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script type="text/javascript">
         // Use noConflict mode to avoid $ conflicts
