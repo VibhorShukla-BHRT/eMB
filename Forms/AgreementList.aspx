@@ -3,7 +3,66 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
 
     <style>
+        .phed-cg-progress-container {
+            padding: 10px 0px !important;
+            max-width: 100% !important;
+            margin: 0 auto !important;
+        }
 
+        .phed-cg-stepper-wrapper {
+            display: flex !important;
+            justify-content: space-between !important;
+            position: relative !important;
+        }
+
+        .phed-cg-stepper-item {
+            position: relative !important;
+            z-index: 1 !important;
+            text-align: center !important;
+            flex: 1 !important;
+        }
+
+        .phed-cg-step-indicator {
+            width: 30px !important;
+            height: 30px !important;
+            border: 3px solid #dee2e6 !important;
+            background: white !important;
+            border-radius: 25% !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            margin: 0 auto 5px !important;
+            font-weight: bold !important;
+            transition: all 0.3s ease !important;
+        }
+
+        .phed-cg-stepper-item.phed-cg-completed .phed-cg-step-indicator {
+            background: #0066cc !important;
+            border-color: #0066cc !important;
+            color: white !important;
+        }
+
+        .phed-cg-stepper-item.phed-cg-completed .phed-cg-step-indicator::after {
+            content: '' !important;
+            margin-left: 2px !important;
+        }
+
+        .phed-cg-stepper-wrapper::before {
+            content: '' !important;
+            position: absolute !important;
+            top: 15px !important;
+            left: 10% !important;
+            right: 10% !important;
+            height: 3px !important;
+            background: #dee2e6 !important;
+            z-index: 0 !important;
+        }
+
+        .phed-cg-step-text {
+            font-size: 14px !important;
+            color: #6c757d !important;
+            margin-top: 0px !important;
+        }
 /* Main Container */
 .agreement-main-container {
     max-width: 1200px;
@@ -443,7 +502,7 @@
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="TitleContent" Runat="Server">
-Dashboard
+eMB Entry Form
 </asp:Content>
 
 <asp:Content ID="Content3" ContentPlaceHolderID="BreadcrumbContent" Runat="Server">
@@ -458,32 +517,26 @@ Dashboard
 </asp:Content>
 
 <asp:Content ID="Content4" ContentPlaceHolderID="MainContent" Runat="Server">
-    <div class="agreement-main-container">
-        
-        <div class="agreement-page-header">
-            <h2>Public Health Engineering Department Govt. Of Chhattisgarh</h2>
-        </div>
-        
-        <div class="agreement-progress-container">
-            <div class="agreement-stepper-wrapper">
-                <div class="agreement-stepper-item agreement-completed" id="step1">
-                    <div class="agreement-step-counter">1</div>
-                    <div class="agreement-step-name">General-Abstract</div>
-                </div>
-                <div class="agreement-stepper-item" id="step2">
-                    <div class="agreement-step-counter">2</div>
-                    <div class="agreement-step-name">Sub-Estimate</div>
-                </div>
-                <div class="agreement-stepper-item" id="step3">
-                    <div class="agreement-step-counter">3</div>
-                    <div class="agreement-step-name">Component of Sub-Estimate</div>
-                </div>
-                <div class="agreement-stepper-item">
-                    <div class="agreement-step-counter">4</div>
-                    <div class="agreement-step-name">eMB Entry</div>
-                </div>
+    <div class="phed-cg-progress-container">
+        <div class="phed-cg-stepper-wrapper">
+            <div class="phed-cg-stepper-item phed-cg-completed">
+                <div class="phed-cg-step-indicator">1</div>
+                <div class="phed-cg-step-text">General-Abstract</div>
+            </div>
+            <div class="phed-cg-stepper-item">
+                <div class="phed-cg-step-indicator">2</div>
+                <div class="phed-cg-step-text">Sub-Estimate</div>
+            </div>
+            <div class="phed-cg-stepper-item">
+                <div class="phed-cg-step-indicator">3</div>
+                <div class="phed-cg-step-text">Component of Sub-Estimate</div>
+            </div>
+            <div class="phed-cg-stepper-item">
+                <div class="phed-cg-step-indicator">4</div>
+                <div class="phed-cg-step-text">eMB Entry</div>
             </div>
         </div>
+    </div>
 
         <div class="agreement-ticker-container">
             <div class="agreement-ticker-text">
@@ -520,7 +573,6 @@ Dashboard
                                     runat="server" 
                                     CssClass="agreement-form-control" 
                                     placeholder="Enter Work Code or leave empty" />
-                                <small class="agreement-text-muted">Leave empty to see all work codes for the book</small>
                             </div>
                         </div>
                         <div class="agreement-col-md-2">
@@ -653,10 +705,4 @@ Dashboard
                 </div>
             </div>
         </asp:Panel>
-        
-    </div>
-    
-    <div class="agreement-floating-button-container">
-        <asp:Button ID="btnPrevious" runat="server" Text="Home" CssClass="agreement-floating-button" OnClick="btnPrevious_Click" />
-    </div>
 </asp:Content>
