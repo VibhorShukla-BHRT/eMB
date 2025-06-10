@@ -20,7 +20,7 @@ namespace PHEDChhattisgarh
         {
             if (Session["UserId"] == null)
             {
-                Response.Redirect("Login.aspx");
+                Response.Redirect("../Login.aspx");
             }
             if (!IsPostBack)
             {

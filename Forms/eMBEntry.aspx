@@ -1,10 +1,7 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="eMBEntry.aspx.cs" Inherits="PHEDChhattisgarh.eMBEntry" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="../MasterPages/MasterPage.master" AutoEventWireup="true" CodeFile="eMBEntry.aspx.cs" Inherits="PHEDChhattisgarh.eMBEntry" %>
 
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head runat="server">
-    <title>eMB Entry - PHED Chhattisgarh</title>
-    <link href="Content/bootstrap.min.css" rel="stylesheet" />
+<asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
+     <link href="Content/bootstrap.min.css" rel="stylesheet" />
     <style>
         .progress-container {
             padding: 10px 0px;
@@ -216,14 +213,25 @@
             vertical-align: middle;
         }
     </style>
-</head>
-<body>
-    <form id="form1" runat="server">
-        <div class="header">
-            <h2>Public Health Engineering Department Govt. Of Chhattisgarh</h2>
-        </div>
+</asp:Content>
 
-        <div class="progress-container">
+<asp:Content ID="Content2" ContentPlaceHolderID="TitleContent" Runat="Server">
+    eMB Entry
+</asp:Content>
+
+<asp:Content ID="Content3" ContentPlaceHolderID="BreadcrumbContent" Runat="Server">
+    <ul class="breadcrumb-title">
+        <li class="breadcrumb-item">
+            <a href="frmHome.aspx"> <i class="fa fa-home"></i> </a>
+        </li>
+        <li class="breadcrumb-item">
+            <a href="frmHome.aspx">Dashboard</a>
+        </li> 
+    </ul>
+</asp:Content>
+
+<asp:Content ID="Content4" ContentPlaceHolderID="MainContent" Runat="Server">
+    <div class="progress-container">
             <div class="stepper-wrapper">
                 <div class="stepper-item completed">
                     <div class="step-counter">1</div>
@@ -235,7 +243,7 @@
                 </div>
                 <div class="stepper-item completed">
                     <div class="step-counter">3</div>
-                    <div class="step-name">Component of Sub-Estimate</div>
+                    <div class="step-name">Component of Sub-Estimate</div>
                 </div>
                 <div class="stepper-item completed">
                     <div class="step-counter">4</div>
@@ -318,11 +326,6 @@
                     <asp:HiddenField ID="hdnSORItem" runat="server" />
                     <asp:HiddenField ID="hdnParticulars" runat="server" />
                     <asp:HiddenField ID="hdnUnits" runat="server" />
-
-                    <asp:ScriptManager 
-                      ID="ScriptManager1" 
-                      runat="server" 
-                      EnablePartialRendering="true" />
 
                     <div class="row">
                         <div class="col-md-12">
@@ -566,48 +569,44 @@
                     }
                 }
             }
-
         </script>
-    </form>
 
-    <script src="Scripts/jquery-3.6.0.min.js"></script>
-    <script src="Scripts/bootstrap.min.js"></script>
-    <script>
-        function recalculateFormula() {
-            const expr = window.formulaExpr;
-            if (!expr) return;
+        <script src="Scripts/jquery-3.6.0.min.js"></script>
+        <script src="Scripts/bootstrap.min.js"></script>
+        <script>
+            function recalculateFormula() {
+                const expr = window.formulaExpr;
+                if (!expr) return;
 
-            let evalExpr = expr;
+                let evalExpr = expr;
 
-            // Replace variables with values from textboxes
-            document.querySelectorAll('[data-param]').forEach(input => {
-                const param = input.getAttribute('data-param');
-                const val = input.value.trim();
+                // Replace variables with values from textboxes
+                document.querySelectorAll('[data-param]').forEach(input => {
+                    const param = input.getAttribute('data-param');
+                    const val = input.value.trim();
 
-                if (!/^\d+(\.\d+)?$/.test(val)) {
+                    if (!/^\d+(\.\d+)?$/.test(val)) {
+                        document.getElementById('<%= txtResult.ClientID %>').value = "";
+                        return;
+                    }
+
+                    const regex = new RegExp("\\b" + param + "\\b", "g");
+                    evalExpr = evalExpr.replace(regex, val);
+                });
+
+                evalExpr = evalExpr.replace(/\bpi\b/g, Math.PI);
+
+                evalExpr = evalExpr.replace(/(\d+(\.\d+)?)\s*\^\s*2/g, (m, x) => (${x}*${x}));
+
+                try {
+                    const result = eval(evalExpr);
+                    if (!isNaN(result)) {
+                        document.getElementById('<%= txtResult.ClientID %>').value =
+                            parseFloat(result).toFixed(6).replace(/\.?0+$/, '');
+                    }
+                } catch (e) {
                     document.getElementById('<%= txtResult.ClientID %>').value = "";
-                    return;
                 }
-
-                const regex = new RegExp("\\b" + param + "\\b", "g");
-                evalExpr = evalExpr.replace(regex, val);
-            });
-
-            evalExpr = evalExpr.replace(/\bpi\b/g, Math.PI);
-
-            evalExpr = evalExpr.replace(/(\d+(\.\d+)?)\s*\^\s*2/g, (m, x) => `(${x}*${x})`);
-
-            try {
-                const result = eval(evalExpr);
-                if (!isNaN(result)) {
-                    document.getElementById('<%= txtResult.ClientID %>').value =
-                        parseFloat(result).toFixed(6).replace(/\.?0+$/, '');
-                }
-            } catch (e) {
-                document.getElementById('<%= txtResult.ClientID %>').value = "";
             }
-        }
-    </script>
-
-</body>
-</html>
+        </script>
+    </asp:Content>
