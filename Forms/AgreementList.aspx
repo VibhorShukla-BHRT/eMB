@@ -201,7 +201,7 @@
     box-shadow: 0 2px 10px rgba(0,0,0,0.08);
     border: 1px solid #e9ecef;
     margin-bottom: 25px;
-    overflow: hidden;
+    overflow: visible !important;
 }
 
 .agreement-card-header {
@@ -268,28 +268,28 @@
 }
 
 .agreement-autocomplete-suggestions {
+    display: none;
     position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    background: white;
-    border: 2px solid #e9ecef;
-    border-top: none;
-    border-radius: 0 0 8px 8px;
+    width: 100%;
     max-height: 200px;
     overflow-y: auto;
-    z-index: 1000;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    z-index: 1001; /* Increased z-index */
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    background: white;
+    border: 1px solid #ddd;
+    border-top: none;
+    border-radius: 0 0 4px 4px;
 }
 
 .agreement-autocomplete-suggestions div {
-    padding: 12px 15px;
+    padding: 8px 12px;
     cursor: pointer;
-    transition: background-color 0.2s ease;
+    background: #f8f9fa !important;
+    transition: background 0.2s;
 }
 
 .agreement-autocomplete-suggestions div:hover {
-    background: #f8f9fa;
+    background: #e9ecef !important;
 }
 
 /* Button Styles */
@@ -705,4 +705,46 @@ eMB Entry Form
                 </div>
             </div>
         </asp:Panel>
+    <script type="text/javascript">
+    function searchEMBBookNo(term) {
+        const suggestionsDiv = document.getElementById("bookNoSuggestions");
+        suggestionsDiv.innerHTML = "";
+
+        if (term.trim().length < 2) {
+            suggestionsDiv.style.display = "none";
+            return;
+        }
+
+        // Call WebMethod using AJAX
+        PageMethods.SearchEMBBookNo(term, function (results) {
+            if (results.length === 0) {
+                suggestionsDiv.style.display = "none";
+                return;
+            }
+
+            suggestionsDiv.innerHTML = "";
+            results.forEach(function (bookNo) {
+                const div = document.createElement("div");
+                div.textContent = bookNo;
+                div.onclick = function () {
+                    document.getElementById('<%= txtEMBBookNo.ClientID %>').value = bookNo;
+                    suggestionsDiv.style.display = "none";
+                };
+                suggestionsDiv.appendChild(div);
+            });
+            suggestionsDiv.style.display = "block";
+        }, function (error) {
+            console.error("Error fetching suggestions:", error);
+        });
+    }
+
+    // Hide suggestions when clicking outside
+    document.addEventListener("click", function (e) {
+        const suggestions = document.getElementById("bookNoSuggestions");
+        const input = document.getElementById('<%= txtEMBBookNo.ClientID %>');
+        if (e.target !== input && e.target !== suggestions) {
+            suggestions.style.display = "none";
+        }
+    });
+    </script>
 </asp:Content>

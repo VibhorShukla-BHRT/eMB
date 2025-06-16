@@ -488,6 +488,8 @@ eMB Entry Form
                 </div>
             </div>
         </div>
+    <script src="Scripts/jquery-3.6.0.min.js"></script>
+        <script src="Scripts/bootstrap.min.js"></script>
 
         <script type="text/javascript">
             // Function to validate numeric input (allows numbers and one decimal point)
@@ -570,23 +572,27 @@ eMB Entry Form
                 }
             }
         </script>
-
-        <script src="Scripts/jquery-3.6.0.min.js"></script>
-        <script src="Scripts/bootstrap.min.js"></script>
-        <script>
+        <script type="text/javascript">
             function recalculateFormula() {
                 const expr = window.formulaExpr;
                 if (!expr) return;
 
                 let evalExpr = expr;
+                let allValid = true;
 
                 // Replace variables with values from textboxes
                 document.querySelectorAll('[data-param]').forEach(input => {
                     const param = input.getAttribute('data-param');
-                    const val = input.value.trim();
+                    let val;
 
-                    if (!/^\d+(\.\d+)?$/.test(val)) {
-                        document.getElementById('<%= txtResult.ClientID %>').value = "";
+                    if (input.tagName === 'SELECT') {
+                        val = input.value;
+                    } else {
+                        val = input.value.trim();
+                    }
+
+                    if (!/^-?\d*\.?\d*$/.test(val)) {
+                        allValid = false;
                         return;
                     }
 
@@ -594,19 +600,35 @@ eMB Entry Form
                     evalExpr = evalExpr.replace(regex, val);
                 });
 
-                evalExpr = evalExpr.replace(/\bpi\b/g, Math.PI);
-
-                evalExpr = evalExpr.replace(/(\d+(\.\d+)?)\s*\^\s*2/g, (m, x) => (${x}*${x}));
-
-                try {
-                    const result = eval(evalExpr);
-                    if (!isNaN(result)) {
-                        document.getElementById('<%= txtResult.ClientID %>').value =
-                            parseFloat(result).toFixed(6).replace(/\.?0+$/, '');
-                    }
-                } catch (e) {
+                if (!allValid) {
                     document.getElementById('<%= txtResult.ClientID %>').value = "";
+            return;
+        }
+
+        evalExpr = evalExpr.replace(/\bpi\b/g, Math.PI.toString());
+        evalExpr = evalExpr.replace(/(\d+(\.\d+)?)\s*\^\s*2/g, (m, x) => `(${x}*${x})`);
+
+        try {
+            const result = eval(evalExpr);
+            if (!isNaN(result)) {
+                const resultElement = document.getElementById('<%= txtResult.ClientID %>');
+                resultElement.value = parseFloat(result).toFixed(6).replace(/\.?0+$/, '');
+            }
+        } catch (e) {
+            document.getElementById('<%= txtResult.ClientID %>').value = "";
                 }
             }
-        </script>
+
+            // Initialize event listeners when page loads
+            document.addEventListener('DOMContentLoaded', function () {
+                // Listen for changes on all parameter inputs
+                document.querySelectorAll('[data-param]').forEach(input => {
+                    if (input.tagName === 'SELECT') {
+                        input.addEventListener('change', recalculateFormula);
+                    } else {
+                        input.addEventListener('input', recalculateFormula);
+                    }
+                });
+            });
+</script>
     </asp:Content>

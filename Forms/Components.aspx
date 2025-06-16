@@ -171,13 +171,13 @@
             background-color: #0066cc !important;
             border-color: #0066cc !important;
             color: white !important;
-            padding: 6px 12px !important;
+            padding: 6px 6px !important;
             font-size: 12px !important;
             border-radius: 4px !important;
             text-decoration: none !important;
             display: inline-block !important;
             margin: 2px !important;
-            min-width: 140px !important;
+            min-width: 200px !important;
             text-align: center !important;
         }
 
@@ -200,13 +200,13 @@
             background-color: #28a745 !important;
             border-color: #28a745 !important;
             color: white !important;
-            padding: 6px 12px !important;
+            padding: 6px 6px !important;
             font-size: 12px !important;
             border-radius: 4px !important;
             text-decoration: none !important;
             display: inline-block !important;
             margin: 2px !important;
-            min-width: 140px !important;
+            min-width: 200px !important;
             text-align: center !important;
         }
 
@@ -277,8 +277,8 @@
         .components-actions-column {
             text-align: center !important;
             vertical-align: middle !important;
-            width: 160px !important;
-            min-width: 160px !important;
+            width: 140px !important;
+            min-width: 140px !important;
         }
 
         /* Floating Button */
@@ -432,7 +432,38 @@
             font-weight: bold !important;
             color: #0066cc !important;
         }
+        .validator-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 5px;
+}
+        .components-grid td.text-truncate {
+    max-width: 300px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 
+.components-grid td.text-truncate:hover {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+    background-color: #e3f2fd;
+    z-index: 100;
+    position: relative;
+}
+
+@media (max-width: 768px) {
+    .components-grid td.text-truncate {
+        max-width: 100px;
+    }
+}
+
+.validator-item {
+    display: inline-block;
+    white-space: nowrap;
+}
         /* Row and Column Fixes */
         .components-row {
             display: flex !important;
@@ -591,26 +622,31 @@ eMB Entry Form
                 <asp:GridView ID="gvComponents" runat="server" CssClass="components-grid" AutoGenerateColumns="false"
                 OnRowCommand="gvComponents_RowCommand">
                     <Columns>
-                        <asp:BoundField DataField="ComponentID" HeaderText="CompId" ItemStyle-HorizontalAlign="Center" 
-                            HeaderStyle-HorizontalAlign="Center" 
-                            HeaderStyle-CssClass="text-center"/>
-                        <asp:BoundField DataField="ComponentName" HeaderText="ComponentName" ItemStyle-HorizontalAlign="Center" 
-                            HeaderStyle-HorizontalAlign="Center" 
-                            HeaderStyle-CssClass="text-center"/>
-                        <asp:BoundField DataField="AA_Quantity" HeaderText="AA_Quantity" ItemStyle-HorizontalAlign="Center" 
+                        <asp:BoundField DataField="ComponentID" HeaderText="CompId" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="50px"
+            HeaderStyle-HorizontalAlign="Center" 
+            HeaderStyle-CssClass="text-center"/>
+            
+        <asp:BoundField DataField="ComponentName" HeaderText="ComponentName" 
+            ItemStyle-HorizontalAlign="Center" 
+            HeaderStyle-HorizontalAlign="Center" 
+            HeaderStyle-CssClass="text-center"
+            ItemStyle-Width="500px" 
+            ItemStyle-CssClass="text-truncate"/>
+            
+        <asp:BoundField DataField="AA_Quantity" HeaderText="AA_Quantity" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="50px"
+            HeaderStyle-HorizontalAlign="Center" ItemStyle-CssClass="text-truncate"
+            HeaderStyle-CssClass="text-center" DataFormatString="{0:N2}"/>
+                        <asp:BoundField DataField="RemainingQty" HeaderText="Remaining Qty" ItemStyle-HorizontalAlign="Center"  ItemStyle-Width="50px"
                             HeaderStyle-HorizontalAlign="Center" 
                             HeaderStyle-CssClass="text-center" DataFormatString="{0:N2}"/>
-                        <asp:BoundField DataField="RemainingQty" HeaderText="Remaining Qty" ItemStyle-HorizontalAlign="Center" 
-                            HeaderStyle-HorizontalAlign="Center" 
-                            HeaderStyle-CssClass="text-center" DataFormatString="{0:N2}"/>
-                        <asp:BoundField DataField="ComponentUnit" HeaderText="Unit" ItemStyle-HorizontalAlign="Center" 
+                        <asp:BoundField DataField="ComponentUnit" HeaderText="Unit" ItemStyle-HorizontalAlign="Center" ItemStyle-CssClass="text-truncate" ItemStyle-Width="50px"
                             HeaderStyle-HorizontalAlign="Center" 
                             HeaderStyle-CssClass="text-center"/>
-                        <asp:BoundField DataField="Amount" HeaderText="Amount (in lakhs)" ItemStyle-HorizontalAlign="Center" 
+                        <asp:BoundField DataField="Amount" HeaderText="Amount (in lakhs)" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="50px" ItemStyle-CssClass="text-truncate"
                             HeaderStyle-HorizontalAlign="Center" 
                             HeaderStyle-CssClass="text-center"/>
 
-                        <asp:TemplateField HeaderText="Actions" ItemStyle-CssClass="components-actions-column" HeaderStyle-CssClass="text-center">
+                        <asp:TemplateField HeaderText="Actions" ItemStyle-CssClass="components-actions-column text-truncate" HeaderStyle-CssClass="text-center" ItemStyle-Width="100px">
                             <ItemTemplate>
                                 <div class="components-action-buttons">
                                     <asp:LinkButton ID="btnViewComponents" runat="server" CommandName="ViewComponents" 
@@ -671,38 +707,47 @@ eMB Entry Form
                                 </asp:DropDownList>
                             </div>
                             <div class="components-col-md-3">
-                                <label id="lblInputType" runat="server" class="components-form-label"><strong>Progress Percentage (%):</strong></label>
-                                <asp:TextBox ID="txtProgressValue" runat="server" CssClass="components-form-control" 
-                                    placeholder="Enter percentage (0-100)" type="number" min="0" max="100" step="0.01" 
-                                    AutoPostBack="true" OnTextChanged="txtProgressValue_TextChanged"></asp:TextBox>
-            
-                                <!-- Required Field Validator -->
-                                <asp:RequiredFieldValidator ID="rfvProgressValue" runat="server" 
-                                    ControlToValidate="txtProgressValue" 
-                                    ErrorMessage="Value is required" 
-                                    CssClass="components-text-danger" 
-                                    ValidationGroup="ProgressEntry"></asp:RequiredFieldValidator>
-            
-                                <!-- Range Validator for Percentage -->
-                                <asp:RangeValidator ID="rvProgressPercentage" runat="server" 
-                                    ControlToValidate="txtProgressValue" 
-                                    ErrorMessage="Percentage must be between 0 and 100" 
-                                    CssClass="components-text-danger" 
-                                    ValidationGroup="ProgressEntry"
-                                    MinimumValue="0" 
-                                    MaximumValue="100" 
-                                    Type="Double"
-                                    Display="Dynamic"></asp:RangeValidator>
-            
-                                <!-- Custom Validator for Quantity -->
-                                <asp:CustomValidator ID="cvProgressValue" runat="server" 
-                                    ControlToValidate="txtProgressValue" 
-                                    ErrorMessage="Quantity cannot exceed total quantity" 
-                                    CssClass="components-text-danger" 
-                                    ValidationGroup="ProgressEntry"
-                                    OnServerValidate="cvProgressValue_ServerValidate"
-                                    Display="Dynamic"></asp:CustomValidator>
-                            </div>
+                        <label id="lblInputType" runat="server" class="components-form-label"></label>
+                        <asp:TextBox ID="txtProgressValue" runat="server" CssClass="components-form-control" 
+                            placeholder="Enter percentage (0-100)" type="number" min="0" max="100" step="0.01"></asp:TextBox>
+    
+                        <div class="validator-container">
+                            <asp:RequiredFieldValidator ID="rfvProgressValue" runat="server" 
+                                ControlToValidate="txtProgressValue" 
+                                ErrorMessage="Value required" 
+                                CssClass="validator-item components-text-danger" 
+                                ValidationGroup="ProgressEntry"></asp:RequiredFieldValidator>
+        
+                            <asp:RangeValidator ID="rvProgressPercentage" runat="server" 
+                                ControlToValidate="txtProgressValue" 
+                                ErrorMessage="" 
+                                CssClass="validator-item components-text-danger" 
+                                ValidationGroup="ProgressEntry"
+                                MinimumValue="0" 
+                                MaximumValue="100" 
+                                Type="Double"
+                                Display="Dynamic"></asp:RangeValidator>
+        
+                            <asp:CustomValidator ID="cvProgressValue" runat="server" 
+                                ControlToValidate="txtProgressValue" 
+                                ErrorMessage="" 
+                                CssClass="validator-item components-text-danger" 
+                                ValidationGroup="ProgressEntry"
+                                OnServerValidate="cvProgressValue_ServerValidate"
+                                Display="Dynamic"></asp:CustomValidator>
+                            <asp:CustomValidator 
+                                ID="cvProgressIncrement" 
+                                runat="server" 
+                                ControlToValidate="txtProgressValue"
+                                ClientValidationFunction="validateProgressIncrement"
+                                OnServerValidate="cvProgressIncrement_ServerValidate"
+                                ValidationGroup="ProgressEntry"
+                                CssClass="validator-item components-text-danger"
+                                Display="Dynamic"
+                                ErrorMessage="">
+                            </asp:CustomValidator>
+                        </div>
+</div>
                             <div class="components-col-md-3">
                                 <label class="components-form-label"><strong>Calculated Value:</strong></label>
                                 <asp:Label ID="lblCalculatedValue" runat="server" CssClass="components-form-control-plaintext text-primary font-weight-bold"></asp:Label>
@@ -715,9 +760,6 @@ eMB Entry Form
                                 <asp:Button ID="btnSaveProgress" runat="server" Text="Save Progress" 
                                     CssClass="btn btn-success" OnClick="btnSaveProgress_Click" 
                                     ValidationGroup="ProgressEntry" />
-                                <asp:Button ID="btnBackToList" runat="server" Text="Back" 
-                                    CssClass="components-btn-secondary" OnClick="btnBackToList_Click" 
-                                    style="margin-left: 10px;" />
                             </div>
                         </div>
                     </div>
@@ -813,4 +855,81 @@ eMB Entry Form
         <div class="components-floating-button-container">
             <asp:Button ID="btnPrevious" runat="server" Text="Previous" CssClass="btn btn-primary components-floating-button" OnClick="btnPrevious_Click" />
         </div>
+    <script type="text/javascript">
+        function updateCalculatedValue() {
+            const entryType = document.getElementById('<%= ddlEntryType.ClientID %>').value;
+        const inputValue = parseFloat(document.getElementById('<%= txtProgressValue.ClientID %>').value) || 0;
+        const totalQty = parseFloat(document.getElementById('<%= lblQuantity.ClientID %>').innerText.trim()) || 0;
+        const unit = document.getElementById('<%= lblUnit.ClientID %>').innerText;
+        const calculatedLabel = document.getElementById('<%= lblCalculatedValue.ClientID %>');
+
+            if (entryType === "Percentage") {
+                if (inputValue > 100) {
+                    calculatedLabel.innerText = "❌ Percentage cannot exceed 100%";
+                    calculatedLabel.className = "components-form-control-plaintext text-danger font-weight-bold";
+                } else {
+                    const calculatedQty = (totalQty * inputValue) / 100;
+                    calculatedLabel.innerText = `Quantity: ${calculatedQty.toFixed(2)} ${unit}`;
+                    calculatedLabel.className = "components-form-control-plaintext text-primary font-weight-bold";
+                }
+            } else {
+                if (inputValue > totalQty) {
+                    calculatedLabel.innerText = `❌ Quantity cannot exceed ${totalQty.toFixed(2)}`;
+                    calculatedLabel.className = "components-form-control-plaintext text-danger font-weight-bold";
+                } else {
+                    const calculatedPercentage = totalQty > 0 ? (inputValue / totalQty) * 100 : 0;
+                    calculatedLabel.innerText = `Percentage: ${calculatedPercentage.toFixed(2)}%`;
+                    calculatedLabel.className = "components-form-control-plaintext text-primary font-weight-bold";
+                }
+            }
+        }
+
+        // Attach events
+        document.getElementById('<%= txtProgressValue.ClientID %>').addEventListener('input', updateCalculatedValue);
+        document.getElementById('<%= ddlEntryType.ClientID %>').addEventListener('change', function() {
+        const inputLabel = document.getElementById('<%= lblInputType.ClientID %>');
+        const progressInput = document.getElementById('<%= txtProgressValue.ClientID %>');
+        
+        if (this.value === "Percentage") {
+            inputLabel.innerHTML = "<strong>Progress Percentage (%):</strong>";
+            progressInput.placeholder = "Enter percentage (0-100)";
+            progressInput.setAttribute("max", "100");
+        } else {
+            inputLabel.innerHTML = "<strong>Completed Quantity:</strong>";
+            progressInput.placeholder = "Enter completed quantity";
+            progressInput.removeAttribute("max");
+        }
+        
+        progressInput.value = "";
+        document.getElementById('<%= lblCalculatedValue.ClientID %>').innerText = "";
+    });
+        function validateProgressIncrement(source, args) {
+            const entryType = document.getElementById('<%= ddlEntryType.ClientID %>').value;
+            const inputValue = parseFloat(args.Value) || 0;
+            const latestProgress = parseFloat('<%= GetLatestProgressForClient() %>') || 0;
+    
+    if (entryType === "Percentage") {
+        args.IsValid = inputValue >= latestProgress;
+        if (!args.IsValid) {
+            source.errormessage = `Progress cannot be less than ${latestProgress.toFixed(2)}%`;
+        }
+    } else {
+                const totalQty = parseFloat('<%= lblQuantity.Text %>') || 0;
+                const currentQty = (latestProgress * totalQty) / 100;
+                args.IsValid = inputValue >= currentQty;
+                if (!args.IsValid) {
+                    source.errormessage = `Quantity cannot be less than ${currentQty.toFixed(2)}`;
+                }
+            }
+        }
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        const entryType = document.getElementById('<%= ddlEntryType.ClientID %>');
+        if (entryType.value === "Percentage") {
+            document.getElementById('<%= lblInputType.ClientID %>').innerHTML = "<strong>Progress Percentage (%):</strong>";
+        } else {
+            document.getElementById('<%= lblInputType.ClientID %>').innerHTML = "<strong>Completed Quantity:</strong>";
+        }
+    });
+</script>
     </asp:Content>

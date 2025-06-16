@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Configuration;
+using System.Globalization;
 
 namespace PHEDChhattisgarh
 {
@@ -150,10 +151,107 @@ namespace PHEDChhattisgarh
                 }
             }
         }
+        private string CurrentView
+        {
+            get { return ViewState["CurrentView"] as string ?? "ComponentList"; }
+            set { ViewState["CurrentView"] = value; }
+        }
 
         protected void btnPrevious_Click(object sender, EventArgs e)
         {
-            Response.Redirect("AgreementList.aspx");
+            if (CurrentView == "ProgressEntry")
+            {
+                // Hide progress panel and show component list
+                GoBackToComponentList();
+                CurrentView = "ComponentList";
+            }
+            else
+            {
+                // Redirect to agreement list
+                Response.Redirect("AgreementList.aspx");
+            }
+        }
+        protected void cvProgressIncrement_ServerValidate(object source, ServerValidateEventArgs args)
+        {
+            try
+            {
+                decimal inputValue = Convert.ToDecimal(args.Value);
+                int componentId = Convert.ToInt32(lblComponentId.Text);
+                decimal latestProgress = GetLatestProgress(componentId);
+
+                if (ddlEntryType.SelectedValue == "Percentage")
+                {
+                    if (inputValue < latestProgress)
+                    {
+                        args.IsValid = false;
+                        cvProgressIncrement.ErrorMessage = string.Format("Progress cannot be less than latest recorded ({0:N2}%)", latestProgress);
+                    }
+                }
+                else // Quantity entry
+                {
+                    decimal totalQty = Convert.ToDecimal(lblQuantity.Text.Trim());
+                    decimal currentProgress = (latestProgress * totalQty) / 100;
+
+                    if (inputValue < currentProgress)
+                    {
+                        args.IsValid = false;
+                        cvProgressIncrement.ErrorMessage = string.Format("Quantity cannot be less than latest recorded ({0:N2})", currentProgress);
+                    }
+                }
+            }
+            catch
+            {
+                args.IsValid = false;
+            }
+        }
+
+        private decimal GetLatestProgress(int componentId)
+        {
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                string query = @"SELECT TOP 1 Percentage 
+                FROM componentPhysicalProgress
+                WHERE ComponentID = @ComponentID
+                ORDER BY EntryDate DESC";
+
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@ComponentID", componentId);
+                    conn.Open();
+                    object result = cmd.ExecuteScalar();
+                    return result != null ? Convert.ToDecimal(result) : 0;
+                }
+            }
+        }
+        protected string GetLatestProgressForClient()
+        {
+            if (!string.IsNullOrEmpty(lblComponentId.Text))
+            {
+                int componentId = Convert.ToInt32(lblComponentId.Text);
+                return GetLatestProgress(componentId).ToString("F2", CultureInfo.InvariantCulture);
+            }
+            return "0";
+        }
+        private void GoBackToComponentList()
+        {
+            // Update quantity before leaving
+            int componentId = Convert.ToInt32(lblComponentId.Text);
+            UpdateRemainingQuantityForComponent(componentId);
+
+            // Reset UI
+            componentListPanel.Style["display"] = "block";
+            progressEntryPanel.Style["display"] = "none";
+            csebSurveyPanel.Style["display"] = "none";
+            sourceSurveyPanel.Style["display"] = "none";
+
+            // Clear form
+            txtProgressValue.Text = "";
+            lblCalculatedValue.Text = "";
+            ddlEntryType.SelectedIndex = 0;
+            lblComponentId.Text = "";
+            lblComponentName.Text = "";
+            lblQuantity.Text = "";
+            lblUnit.Text = "";
         }
 
         protected void gvComponents_RowCommand(object sender, GridViewCommandEventArgs e)
@@ -184,7 +282,7 @@ namespace PHEDChhattisgarh
             else if (e.CommandName == "EnterProgress")
             {
                 string[] args = e.CommandArgument.ToString().Split('#');
-
+                CurrentView = "ProgressEntry";
                 if (args.Length == 4)
                 {
                     string componentId = args[0];
@@ -392,6 +490,14 @@ namespace PHEDChhattisgarh
                     {
                         ClientScript.RegisterStartupScript(this.GetType(), "alert",
                             "alert('Calculated progress exceeds 100%. Please check your input values.');", true);
+                        return;
+                    }
+                    decimal latest = GetLatestProgress(Convert.ToInt32(lblComponentId.Text));
+                    if ((ddlEntryType.SelectedValue == "Percentage" && percentage < latest) ||
+                        (ddlEntryType.SelectedValue == "Quantity" && completedQty < (latest * totalQty / 100)))
+                    {
+                        ClientScript.RegisterStartupScript(this.GetType(), "alert",
+                            "alert('Progress cannot be less than last recorded value!');", true);
                         return;
                     }
                     string userId = Session["UserId"] != null ? Session["UserId"].ToString() : null;

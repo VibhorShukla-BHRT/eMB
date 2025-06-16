@@ -96,11 +96,11 @@ namespace PHEDChhattisgarh
                         var paramInfos = serializer.Deserialize<List<ParamInfo>>(rawParams);
 
                         string[] unitArray = rdr["units"].ToString().Trim('[', ']').Replace("\"", "").Split(',');
-                         var unitList = new List<string>();
-                                    foreach (string u in unitArray)
-                                    {
-                                        unitList.Add(u.Trim());
-                                    }
+                        var unitList = new List<string>();
+                        foreach (string u in unitArray)
+                        {
+                            unitList.Add(u.Trim());
+                        }
 
                         string formulaExpression = rdr["expression"].ToString();
                         int currentFormulaId = int.Parse(ddlFormula.SelectedValue);
@@ -127,16 +127,16 @@ namespace PHEDChhattisgarh
                                 // Add predefined options
                                 ddl.Items.AddRange(new[]
                                 {
-                                    new ListItem("0", "0"),
-                                    new ListItem("5", "5"),
-                                    new ListItem("15", "15"),
-                                    new ListItem("25", "25"),
-                                    new ListItem("35", "35"),
-                                    new ListItem("60", "60"),
-                                    new ListItem("75", "75"),
-                                    new ListItem("90", "90"),
-                                    new ListItem("100", "100")
-                                });
+                            new ListItem("0", "0"),
+                            new ListItem("5", "5"),
+                            new ListItem("15", "15"),
+                            new ListItem("25", "25"),
+                            new ListItem("35", "35"),
+                            new ListItem("60", "60"),
+                            new ListItem("75", "75"),
+                            new ListItem("90", "90"),
+                            new ListItem("100", "100")
+                        });
 
                                 tdInput.Controls.Add(ddl);
                             }
@@ -176,11 +176,21 @@ namespace PHEDChhattisgarh
                             }
                         }
 
+                        // Register the formula expression with the client
                         ScriptManager.RegisterStartupScript(
                             this,
                             this.GetType(),
                             "storeFormulaExpr",
                             "window.formulaExpr = '" + formulaExpression.Replace("'", "\\'") + "';",
+                            true
+                        );
+
+                        // Also trigger initial calculation
+                        ScriptManager.RegisterStartupScript(
+                            this,
+                            this.GetType(),
+                            "initialCalc",
+                            "setTimeout(recalculateFormula, 100);", // Small delay to ensure DOM is ready
                             true
                         );
                     }

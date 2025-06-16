@@ -37,10 +37,10 @@ namespace PHEDChhattisgarh
 
             using (var conn = new SqlConnection(connectionString))
             using (var cmd = new SqlCommand(@"
-                SELECT DISTINCT TOP 20 eMBBookNo 
-                FROM eMBBookNoIssued 
-                WHERE eMBBookNo LIKE @SearchTerm + '%'
-                ORDER BY eMBBookNo", conn))
+        SELECT DISTINCT TOP 20 eMBBookNo 
+        FROM eMBBookNoIssued 
+        WHERE eMBBookNo LIKE @SearchTerm + '%'
+        ORDER BY eMBBookNo", conn))
             {
                 cmd.Parameters.AddWithValue("@SearchTerm", searchTerm);
                 conn.Open();
@@ -236,14 +236,20 @@ namespace PHEDChhattisgarh
 
         private void LoadWorkCodesForBook(string bookNo)
         {
+            string userId = Session["UserId"] != null ? Session["UserId"].ToString() : null;
+            if (Session["UserId"] == null)
+            {
+                Response.Redirect("../Login.aspx");
+            }
             using (var conn = new SqlConnection(connectionString))
             using (var cmd = new SqlCommand(@"
                 SELECT DISTINCT WorkCode 
                 FROM eMBBookNoIssued 
-                WHERE eMBBookNo = @BookNo 
+                WHERE eMBBookNo = @BookNo AND SubEnginnerId=@userId
                 ORDER BY WorkCode", conn))
             {
                 cmd.Parameters.AddWithValue("@BookNo", bookNo);
+                cmd.Parameters.AddWithValue("@userId", userId);
                 var dt = new DataTable();
                 new SqlDataAdapter(cmd).Fill(dt);
 
