@@ -330,7 +330,7 @@ eMB Entry Form
 </asp:Content>
 
 <asp:Content ID="Content4" ContentPlaceHolderID="MainContent" Runat="Server">
-
+     <asp:HiddenField ID="hdnTotalQuantity" runat="server" Value="0" />
     <div class="phed-cg-progress-container">
         <div class="phed-cg-stepper-wrapper">
             <div class="phed-cg-stepper-item phed-cg-completed">
@@ -464,7 +464,11 @@ eMB Entry Form
             <asp:Button ID="btnPrevious" runat="server" Text="Previous" CssClass="btn btn-secondary phed-cg-float-button" OnClick="btnPrevious_Click" />
         </div>
     </div>
-
-    <script src="Scripts/jquery-3.6.0.min.js"></script>
-    <script src="Scripts/bootstrap.min.js"></script>
+    <script>
+        // Collapse sidebar on page load
+        $(document).ready(function () {
+            $('body').addClass('navbar-collapsed');
+            $('#pcoded').addClass('navbar-collapsed');
+        });
+    </script>
 </asp:Content>

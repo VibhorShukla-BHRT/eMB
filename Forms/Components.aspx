@@ -855,6 +855,13 @@ eMB Entry Form
         <div class="components-floating-button-container">
             <asp:Button ID="btnPrevious" runat="server" Text="Previous" CssClass="btn btn-primary components-floating-button" OnClick="btnPrevious_Click" />
         </div>
+     <script>
+         // Collapse sidebar on page load
+         $(document).ready(function () {
+             $('body').addClass('navbar-collapsed');
+             $('#pcoded').addClass('navbar-collapsed');
+         });
+     </script>
     <script type="text/javascript">
         function updateCalculatedValue() {
             const entryType = document.getElementById('<%= ddlEntryType.ClientID %>').value;

@@ -106,6 +106,12 @@
         .input-error {
             border: 1px solid red;
         }
+        .emb-form-group{
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-content: flex-start;
+        }
         .auto-size-label {
             min-height: 38px; /* Standard form-control height */
             height: auto; /* Will expand as needed */
@@ -253,84 +259,97 @@ eMB Entry Form
         </div>
 
         <div class="container">
-            <!-- Work Details Grid -->
-            <div class="card mb-4">
+            <asp:UpdatePanel ID="upnlWorkDetails" runat="server" UpdateMode="Conditional">
+                <ContentTemplate>
+                    <div class="card mb-4">
+                        <div class="card-header py-2">
+                            <h3 class="font-weight-bold"><strong>Details of Work</strong></h3>
+                        </div>
+                        <div class="card-body p-2">
+                            <asp:Panel ID="pnlWorkDetails" runat="server" CssClass="work-details work-occupied">
+                                <asp:GridView ID="gvWorkDetails" runat="server" 
+                                    CssClass="table table-bordered table-sm details-grid" 
+                                    AutoGenerateColumns="false"
+                                    GridLines="Both">
+                                    <Columns>
+                                        <asp:BoundField 
+                                            DataField="Work_Code" 
+                                            HeaderText="Work Code" 
+                                            ItemStyle-HorizontalAlign="Center" 
+                                            HeaderStyle-HorizontalAlign="Center" 
+                                            HeaderStyle-CssClass="text-center" />
 
-                <div class="card-header py-2">
-                    <h3><strong>Details of Work</strong></h3>
-                </div>
-                <div class="card-body p-2">
-                    <asp:Panel ID="pnlWorkDetails" runat="server" CssClass="work-details work-occupied">
-                        <asp:GridView ID="gvWorkDetails" runat="server" 
-                            CssClass="table table-bordered table-sm details-grid" 
-                            AutoGenerateColumns="false"
-                            GridLines="Both">
-                            <Columns>
-                                <asp:BoundField 
-                                    DataField="Work_Code" 
-                                    HeaderText="Work Code" 
-                                    ItemStyle-HorizontalAlign="Center" 
-                                    HeaderStyle-HorizontalAlign="Center" 
-                                    HeaderStyle-CssClass="text-center" />
+                                        <asp:BoundField 
+                                            DataField="WorkName" 
+                                            HeaderText="Name Of Work" 
+                                            ItemStyle-HorizontalAlign="Center" 
+                                            HeaderStyle-HorizontalAlign="Center" 
+                                            HeaderStyle-CssClass="text-center" />
 
-                                <asp:BoundField 
-                                    DataField="WorkName" 
-                                    HeaderText="Name Of Work" 
-                                    ItemStyle-HorizontalAlign="Center" 
-                                    HeaderStyle-HorizontalAlign="Center" 
-                                    HeaderStyle-CssClass="text-center" />
+                                        <asp:BoundField 
+                                            DataField="ComponentName" 
+                                            HeaderText="Component" 
+                                            ItemStyle-HorizontalAlign="Center" 
+                                            HeaderStyle-HorizontalAlign="Center" 
+                                            HeaderStyle-CssClass="text-center" />
 
-                                <asp:BoundField 
-                                    DataField="ComponentName" 
-                                    HeaderText="Component" 
-                                    ItemStyle-HorizontalAlign="Center" 
-                                    HeaderStyle-HorizontalAlign="Center" 
-                                    HeaderStyle-CssClass="text-center" />
+                                        <asp:BoundField 
+                                            DataField="SORItem" 
+                                            HeaderText="SOR Item" 
+                                            ItemStyle-HorizontalAlign="Center" 
+                                            HeaderStyle-HorizontalAlign="Center" 
+                                            HeaderStyle-CssClass="text-center" />
 
-                                <asp:BoundField 
-                                    DataField="SORItem" 
-                                    HeaderText="SOR Item" 
-                                    ItemStyle-HorizontalAlign="Center" 
-                                    HeaderStyle-HorizontalAlign="Center" 
-                                    HeaderStyle-CssClass="text-center" />
-
-                                <asp:BoundField 
-                                    DataField="Qty" 
-                                    HeaderText="Quantity" 
-                                    ItemStyle-HorizontalAlign="Center" 
-                                    HeaderStyle-HorizontalAlign="Center" 
-                                    HeaderStyle-CssClass="text-center" />
-                            </Columns>
-                        </asp:GridView>
-                    </asp:Panel>
-                    <div class="form-group row">
-                      <label class="col-sm-2 col-form-label">
-                          SOR Sub-Item:
-                      </label>
-                      <div class="col-sm-12">
-                        <asp:Label ID="lblSORItem" runat="server" CssClass="form-control-plaintext" />
-                      </div>
+                                        <asp:BoundField 
+                                            DataField="Qty" 
+                                            HeaderText="Qty"
+                                            ItemStyle-HorizontalAlign="Center" 
+                                            HeaderStyle-HorizontalAlign="Center" 
+                                            HeaderStyle-CssClass="text-center"
+                                            DataFormatString="{0:N2}" />
+                                        <asp:TemplateField 
+                                            HeaderText="Remaining Qty" 
+                                            ItemStyle-HorizontalAlign="Center" 
+                                            HeaderStyle-HorizontalAlign="Center" 
+                                            HeaderStyle-CssClass="text-center">
+                                            <ItemTemplate>
+                                                <asp:Label ID="lblRemainingQuantity" runat="server" 
+                                                    Text='<%# GetRemainingQuantity(Convert.ToDecimal(Eval("Qty"))) %>'
+                                                    CssClass="remaining-qty" />
+                                            </ItemTemplate>
+                                        </asp:TemplateField>
+                                    </Columns>
+                                </asp:GridView>
+                            </asp:Panel>
+                            <div class="form-group row">
+                              <label class="col-sm-2 col-form-label">
+                                  SOR Sub-Item:
+                              </label>
+                              <div class="col-sm-12">
+                                <asp:Label ID="lblSORItem" runat="server" CssClass="form-control-plaintext" />
+                              </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <!-- Measurement Entry Section -->
+                </ContentTemplate>
+            </asp:UpdatePanel>
             <div class="card mb-4">
                 <div class="card-header">
-                    <h3><b>Measurement Entry</b></h3>
+                    <h3 class="font-weight-bold"><b>Measurement Entry</b></h3>
                 </div>
                
-                     
                 <div class="card-body">
                     <asp:HiddenField ID="hdnEditEmbId" runat="server" Value="" />
                     <asp:HiddenField ID="hdnSORItemNo" runat="server" />
                     <asp:HiddenField ID="hdnSORItem" runat="server" />
                     <asp:HiddenField ID="hdnParticulars" runat="server" />
                     <asp:HiddenField ID="hdnUnits" runat="server" />
+                    <asp:HiddenField ID="hdnTotalQuantity" runat="server" Value="0" />
 
                     <div class="row">
                         <div class="col-md-12">
-                            <div class="emb-id">
-                                <label><strong>Unique EMB ID:</strong></label>
+                            <div class="emb-id font-weight-bold">
+                                <label class="font-weight-bold"><strong>Unique EMB ID:</strong></label>
                                 <asp:Label ID="lblUniqueEmbID" runat="server" Text="" CssClass="form-control-plaintext" />
                                 <asp:HiddenField ID="hdnUniqueEmbID" runat="server" />
                             </div>
@@ -348,7 +367,7 @@ eMB Entry Form
                         </asp:SqlDataSource>
 
                         <div class="form-group">
-                          <asp:Label runat="server" AssociatedControlID="ddlFormula" Text="Choose Formula:" CssClass="control-label" />
+                          <asp:Label runat="server" AssociatedControlID="ddlFormula" Text="Choose Formula:" CssClass="control-label font-weight-bold" />
                           <asp:DropDownList
                             ID="ddlFormula"
                             runat="server"
@@ -361,37 +380,39 @@ eMB Entry Form
                             CssClass="form-control">
                           </asp:DropDownList>
                         </div>
-
-                        <table class="table table-bordered" style="max-width:600px;">
-                          <thead class="thead-light">
-                            <tr>
-                              <th style="width:40%;">Parameter</th>
-                              <th style="width:60%;">Value</th>
-                            </tr>
-                          </thead>
-                          <tbody id="tblParams" runat="server">
-                          </tbody>
-                          <tfoot>
-                            <tr class="table-secondary">
-                              <td><strong>Calculated Value</strong></td>
-                              <td>
-                                <asp:TextBox ID="txtResult" runat="server"
-                                             CssClass="form-control"
-                                             ReadOnly="true"
-                                             Style="background:#e9ecef;" />
-                              </td>
-                            </tr>
-                          </tfoot>
-                        </table>
-
-                        <div class="form-group">
-                          <asp:Label runat="server" AssociatedControlID="ddlUnit" Text="Unit:" CssClass="control-label" />
-                          <asp:DropDownList
-                            ID="ddlUnit"
-                            runat="server"
-                            CssClass="form-control">
-                            <asp:ListItem Text="-- Select Unit --" Value="" />
-                          </asp:DropDownList>
+                        <div class="row">
+                            <div class="col-md-8">
+                                <table class="table table-bordered">
+                                  <thead class="thead-light">
+                                    <tr>
+                                      <th style="width:40%;" class="font-weight-bold">Parameter</th>
+                                      <th style="width:60%;" class="font-weight-bold">Value</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody id="tblParams" runat="server">
+                                  </tbody>
+                                  <tfoot>
+                                    <tr class="table-secondary">
+                                      <td><strong>Calculated Value</strong></td>
+                                      <td>
+                                        <asp:TextBox ID="txtResult" runat="server"
+                                                     CssClass="form-control"
+                                                     ReadOnly="true"
+                                                     Style="background:#e9ecef;" />
+                                      </td>
+                                    </tr>
+                                  </tfoot>
+                                </table>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="emb-form-group">
+                                  <asp:Label runat="server" AssociatedControlID="ddlunit01" Text="Unit:" CssClass="control-label font-weight-bold" />
+                                   <asp:TextBox ID="ddlunit01" runat="server"
+                                                 CssClass="form-control-plaintext"
+                                                 ReadOnly="true"
+                                                 Style="background:#e9ecef; font-size: 1.1rem;" />
+                                </div>
+                            </div>
                         </div>
 
                       </ContentTemplate>
@@ -399,90 +420,87 @@ eMB Entry Form
                         <asp:AsyncPostBackTrigger ControlID="ddlFormula" EventName="SelectedIndexChanged" />
                       </Triggers>
                     </asp:UpdatePanel>
+                    <div class="form-group mt-3">
+                        <label class="font-weight-bold">Remarks:</label>
+                        <asp:TextBox ID="txtRemarks" runat="server" CssClass="form-control" TextMode="MultiLine" Rows="3"></asp:TextBox>
+                    </div>
 
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Remarks:</label>
-                                <asp:TextBox ID="txtRemarks" runat="server" CssClass="form-control"></asp:TextBox>
+                    <asp:UpdatePanel ID="upnlEntries" runat="server" UpdateMode="Conditional">
+                        <ContentTemplate>
+                            <div class="row mt-2">
+                                <div class="col-md-12">
+                                    <h6 class="font-weight-bold">Current Entries</h6>
+                                    <asp:GridView ID="gvEntries" runat="server" CssClass="table table-bordered details-grid" AutoGenerateColumns="false" 
+                                        OnRowCommand="gvEntries_RowCommand" DataKeyNames="EmbId, IsCurrent"
+                                        Width="100%" CellPadding="5" HeaderStyle-CssClass="table-header">
+                                        <Columns>
+                                            <asp:BoundField DataField="EmbId" HeaderText="ID" 
+                                                ItemStyle-HorizontalAlign="Center" 
+                                                HeaderStyle-HorizontalAlign="Center" 
+                                                HeaderStyle-CssClass="text-center" />
+
+                                            <asp:BoundField DataField="SORItemNo" HeaderText="Sub-Item No" 
+                                                ItemStyle-HorizontalAlign="Center" 
+                                                HeaderStyle-HorizontalAlign="Center" 
+                                                HeaderStyle-CssClass="text-center"/>
+
+                                            <asp:BoundField DataField="UniqueEmbID" HeaderText="Unique EMB ID" 
+                                                ItemStyle-HorizontalAlign="Center" 
+                                                HeaderStyle-HorizontalAlign="Left" 
+                                                HeaderStyle-CssClass="text-center" />
+                    
+                                            <asp:TemplateField HeaderText="Inputs">
+                                              <ItemTemplate>
+                                                <%# FormatInputs(Eval("Inputs").ToString()) %>
+                                              </ItemTemplate>
+                                            </asp:TemplateField>
+
+                                            <asp:BoundField DataField="ActualUnit" HeaderText="Unit" 
+                                                ItemStyle-HorizontalAlign="Center" 
+                                                HeaderStyle-HorizontalAlign="Center" 
+                                                HeaderStyle-CssClass="text-center" />
+
+                                            <asp:BoundField DataField="ResultValue" HeaderText="Value"
+                                                ItemStyle-HorizontalAlign="Center" 
+                                                HeaderStyle-HorizontalAlign="Center" 
+                                                HeaderStyle-CssClass="text-center" />
+
+                                            <asp:BoundField DataField="Remark" HeaderText="Remarks" ItemStyle-HorizontalAlign="Center" 
+                                                HeaderStyle-HorizontalAlign="Center" 
+                                                HeaderStyle-CssClass="text-center"/>
+                                            
+                                            <asp:TemplateField HeaderText="Date">
+                                                <ItemTemplate>
+                                                    <%# ExtractDateFromEmbID(Eval("UniqueEmbID").ToString()) %>
+                                                </ItemTemplate>
+                                            </asp:TemplateField>
+                                            <asp:TemplateField HeaderText="Time">
+                                                <ItemTemplate>
+                                                    <%# ExtractTimeFromEmbID(Eval("UniqueEmbID").ToString()) %>
+                                                </ItemTemplate>
+                                            </asp:TemplateField>
+                                            <asp:TemplateField HeaderText="Actions">
+                                                <ItemTemplate>
+                                                    <asp:LinkButton ID="btnEdit" runat="server" CommandName="EditItem" CommandArgument='<%# Eval("EmbId") %>' 
+                                                        CssClass="btn btn-sm btn-primary" Text="Edit" />
+                                                    <asp:LinkButton ID="btnDelete" runat="server" CommandName="DeleteItem" CommandArgument='<%# Eval("EmbId") %>' 
+                                                        CssClass="btn btn-sm btn-danger" Text="Delete" OnClientClick="return confirm('Are you sure you want to delete this entry?');" />
+                                                </ItemTemplate>
+                                            </asp:TemplateField>
+                                        </Columns>
+                                    </asp:GridView>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-
-                    <div class="row mt-2">
-                        <div class="col-md-12">
-                            <h6>Current Entries</h6>
-                            <asp:GridView ID="gvEntries" runat="server" CssClass="table table-bordered details-grid" AutoGenerateColumns="false" 
-                                OnRowCommand="gvEntries_RowCommand" DataKeyNames="EmbId, IsCurrent"
-                                Width="100%" CellPadding="5" HeaderStyle-CssClass="table-header">
-                                <Columns>
-                                    <asp:BoundField DataField="EmbId" HeaderText="ID" 
-                                        ItemStyle-HorizontalAlign="Center" 
-                                        HeaderStyle-HorizontalAlign="Center" 
-                                        HeaderStyle-CssClass="text-center" />
-
-                                    <asp:BoundField DataField="SORItemNo" HeaderText="Sub-Item No" 
-                                        ItemStyle-HorizontalAlign="Center" 
-                                        HeaderStyle-HorizontalAlign="Center" 
-                                        HeaderStyle-CssClass="text-center"/>
-
-                                    <asp:BoundField DataField="UniqueEmbID" HeaderText="Unique EMB ID" 
-                                        ItemStyle-HorizontalAlign="Center" 
-                                        HeaderStyle-HorizontalAlign="Left" 
-                                        HeaderStyle-CssClass="text-center" />
-            
-
-                                    <asp:TemplateField HeaderText="Inputs">
-                                      <ItemTemplate>
-                                        <%# FormatInputs(Eval("Inputs").ToString()) %>
-                                      </ItemTemplate>
-                                    </asp:TemplateField>
-
-                                    <asp:BoundField DataField="ActualUnit" HeaderText="Unit" 
-                                        ItemStyle-HorizontalAlign="Center" 
-                                        HeaderStyle-HorizontalAlign="Center" 
-                                        HeaderStyle-CssClass="text-center" />
-
-                                    <asp:BoundField DataField="ResultValue" HeaderText="Value"
-                                        ItemStyle-HorizontalAlign="Center" 
-                                        HeaderStyle-HorizontalAlign="Center" 
-                                        HeaderStyle-CssClass="text-center" />
-
-
-                                    <asp:BoundField DataField="Remark" HeaderText="Remarks" ItemStyle-HorizontalAlign="Center" 
-                                        HeaderStyle-HorizontalAlign="Center" 
-                                        HeaderStyle-CssClass="text-center"/>
-                                    
-                                    <asp:TemplateField HeaderText="Date">
-                                        <ItemTemplate>
-                                            <%# ExtractDateFromEmbID(Eval("UniqueEmbID").ToString()) %>
-                                        </ItemTemplate>
-                                    </asp:TemplateField>
-                                    <asp:TemplateField HeaderText="Time">
-                                        <ItemTemplate>
-                                            <%# ExtractTimeFromEmbID(Eval("UniqueEmbID").ToString()) %>
-                                        </ItemTemplate>
-                                    </asp:TemplateField>
-                                    <asp:TemplateField HeaderText="Actions">
-                                        <ItemTemplate>
-                                            <asp:LinkButton ID="btnEdit" runat="server" CommandName="EditItem" CommandArgument='<%# Eval("EmbId") %>' 
-                                                CssClass="btn btn-sm btn-primary" Text="Edit" />
-                                            <asp:LinkButton ID="btnDelete" runat="server" CommandName="DeleteItem" CommandArgument='<%# Eval("EmbId") %>' 
-                                                CssClass="btn btn-sm btn-danger" Text="Delete" OnClientClick="return confirm('Are you sure you want to delete this entry?');" />
-                                        </ItemTemplate>
-                                    </asp:TemplateField>
-                                </Columns>
-                            </asp:GridView>
-                        </div>
-                    </div>
+                        </ContentTemplate>
+                    </asp:UpdatePanel>
 
                    <div class="row mt-3">
                         <div class="col-md-12">
                             <asp:Button ID="btnSave" runat="server" Text="Save Entry" CssClass="btn btn-primary" OnClick="btnSave_Click" OnClientClick="return validateForm();" />
                             <asp:Button ID="btnReset" runat="server" Text="Reset" CssClass="btn btn-secondary" OnClick="btnReset_Click" />
                             <div class="floating-button-container">
-    <asp:Button ID="btnBackToComponentList" runat="server" Text="Back to Sub-Components" CssClass="floating-button" OnClick="btnBackToComponentList_Click" />
-</div>
+                                <asp:Button ID="btnBackToComponentList" runat="server" Text="Back to Sub-Components" CssClass="floating-button" OnClick="btnBackToComponentList_Click" />
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -507,22 +525,9 @@ eMB Entry Form
                     return true;
                 }
 
-                // Allow decimal point (.)
-                if (key == 46 || key == 190) {
-                    // Check if there's already a decimal point in the input
-                    if (event.target.value.indexOf('.') !== -1) {
-                        return false;
-                    }
+                // Allow decimal point (.) and minus sign (-)
+                if (key == 46 || key == 190 || key == 45 || key == 189) {
                     return true;
-                }
-
-                // Allow minus sign (-)
-                if (key == 45 || key == 189) {
-                    // Allow minus sign only at the beginning
-                    if (event.target.value.length === 0) {
-                        return true;
-                    }
-                    return false;
                 }
 
                 // Ensure that it is a number and stop the keypress
@@ -572,8 +577,22 @@ eMB Entry Form
                 }
             }
         </script>
+    <script runat="server">
+    protected string GetRemainingQuantity(decimal totalQty)
+    {
+        decimal totalMeasured = GetTotalMeasuredQuantity();
+        decimal remaining = totalQty - totalMeasured;
+        return remaining.ToString("N2");
+    }
+</script>
         <script type="text/javascript">
             function recalculateFormula() {
+                // Handle bifurcation formula differently
+                if (window.currentFormulaId === 11) {
+                    handleBifurcation();
+                    return;
+                }
+
                 const expr = window.formulaExpr;
                 if (!expr) return;
 
@@ -602,20 +621,43 @@ eMB Entry Form
 
                 if (!allValid) {
                     document.getElementById('<%= txtResult.ClientID %>').value = "";
-            return;
-        }
+                    return;
+                }
 
-        evalExpr = evalExpr.replace(/\bpi\b/g, Math.PI.toString());
-        evalExpr = evalExpr.replace(/(\d+(\.\d+)?)\s*\^\s*2/g, (m, x) => `(${x}*${x})`);
+                evalExpr = evalExpr.replace(/\bpi\b/g, Math.PI.toString());
+                evalExpr = evalExpr.replace(/(\d+(\.\d+)?)\s*\^\s*2/g, (m, x) => `(${x}*${x})`);
 
-        try {
-            const result = eval(evalExpr);
-            if (!isNaN(result)) {
-                const resultElement = document.getElementById('<%= txtResult.ClientID %>');
-                resultElement.value = parseFloat(result).toFixed(6).replace(/\.?0+$/, '');
+                try {
+                    const result = eval(evalExpr);
+                    if (!isNaN(result)) {
+                        const resultElement = document.getElementById('<%= txtResult.ClientID %>');
+                        resultElement.value = parseFloat(result).toFixed(6).replace(/\.?0+$/, '');
+                    }
+                } catch (e) {
+                    document.getElementById('<%= txtResult.ClientID %>').value = "";
+                }
             }
-        } catch (e) {
-            document.getElementById('<%= txtResult.ClientID %>').value = "";
+
+            function handleBifurcation() {
+                try {
+                    // Get selected percentage
+                    const percentageSelect = document.querySelector('[data-param="P"]');
+                    const percentage = parseFloat(percentageSelect.value);
+                    
+                    // Get total quantity from server
+                    const totalQty = parseFloat(document.getElementById('<%= hdnTotalQuantity.ClientID %>').value);
+                    
+                    if (isNaN(percentage) || isNaN(totalQty)) {
+                        document.getElementById('<%= txtResult.ClientID %>').value = "";
+                        return;
+                    }
+                    
+                    // Calculate bifurcation: (percentage / 100) * total quantity
+                    const result = (percentage / 100) * totalQty;
+                    document.getElementById('<%= txtResult.ClientID %>').value = result.toFixed(6);
+                } catch (e) {
+                    console.error("Error in bifurcation calculation:", e);
+                    document.getElementById('<%= txtResult.ClientID %>').value = "";
                 }
             }
 
@@ -630,5 +672,5 @@ eMB Entry Form
                     }
                 });
             });
-</script>
-    </asp:Content>
+        </script>
+</asp:Content>
