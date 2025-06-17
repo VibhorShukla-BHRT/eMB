@@ -345,6 +345,8 @@ eMB Entry Form
                     <asp:HiddenField ID="hdnParticulars" runat="server" />
                     <asp:HiddenField ID="hdnUnits" runat="server" />
                     <asp:HiddenField ID="hdnTotalQuantity" runat="server" Value="0" />
+                    <asp:HiddenField ID="hdnRemQty" runat="server" Value="0" />
+                    <asp:HiddenField ID="hdncalc" runat="server" Value="0" />
 
                     <div class="row">
                         <div class="col-md-12">
@@ -578,12 +580,13 @@ eMB Entry Form
             }
         </script>
     <script runat="server">
-    protected string GetRemainingQuantity(decimal totalQty)
-    {
-        decimal totalMeasured = GetTotalMeasuredQuantity();
-        decimal remaining = totalQty - totalMeasured;
-        return remaining.ToString("N2");
-    }
+        protected string GetRemainingQuantity(decimal totalQty)
+        {
+            decimal totalMeasured = GetTotalMeasuredQuantity();
+            decimal remaining = totalQty - totalMeasured;
+            hdnRemQty.Value = remaining.ToString("N2");
+            return remaining.ToString("N2");
+        }
 </script>
         <script type="text/javascript">
             function recalculateFormula() {
@@ -646,6 +649,7 @@ eMB Entry Form
                     
                     // Get total quantity from server
                     const totalQty = parseFloat(document.getElementById('<%= hdnTotalQuantity.ClientID %>').value);
+                    const rem = parseFloat(document.getElementById('<%= hdnRemQty.ClientID %>').value);
                     
                     if (isNaN(percentage) || isNaN(totalQty)) {
                         document.getElementById('<%= txtResult.ClientID %>').value = "";
@@ -653,8 +657,9 @@ eMB Entry Form
                     }
                     
                     // Calculate bifurcation: (percentage / 100) * total quantity
-                    const result = (percentage / 100) * totalQty;
+                    const result = totalQty*((percentage/100)-1)+rem;
                     document.getElementById('<%= txtResult.ClientID %>').value = result.toFixed(6);
+                    document.getElementById('<%= hdncalc.ClientID %>').value = result.toFixed(6);
                 } catch (e) {
                     console.error("Error in bifurcation calculation:", e);
                     document.getElementById('<%= txtResult.ClientID %>').value = "";

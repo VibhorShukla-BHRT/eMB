@@ -298,6 +298,7 @@ namespace PHEDChhattisgarh
                     if (lblRemaining != null)
                     {
                         lblRemaining.Text = remaining.ToString("N2");
+                        hdnRemQty.Value = remaining.ToString("N2");
                     }
                 }
             }
@@ -663,30 +664,7 @@ namespace PHEDChhattisgarh
             // Special handling for bifurcation formula (ID = 11)
             if (formulaId == 11)
             {
-                // Get percentage value from inputs
-                decimal percentage;
-                decimal totalQty;
-                if (inputs.TryGetValue("P", out percentage))
-                {
-                    // Get total quantity from hidden field
-                    if (decimal.TryParse(hdnTotalQuantity.Value, out totalQty))
-                    {
-                        // Calculate: total quantity * (percentage / 100)
-                        resultValue = totalQty * (percentage / 100);
-                    }
-                    else
-                    {
-                        ScriptManager.RegisterStartupScript(this, GetType(), "alert",
-                            "alert('Invalid total quantity value for bifurcation calculation.');", true);
-                        return;
-                    }
-                }
-                else
-                {
-                    ScriptManager.RegisterStartupScript(this, GetType(), "alert",
-                        "alert('Percentage parameter (P) is required for bifurcation.');", true);
-                    return;
-                }
+                resultValue = decimal.Parse(hdncalc.Value, CultureInfo.InvariantCulture);
             }
             else // All other formulas
             {
@@ -759,7 +737,24 @@ namespace PHEDChhattisgarh
                     }
                 }
             }
+            if (resultValue <= 0)
+            {
+                ScriptManager.RegisterStartupScript(this, GetType(), "alert",
+                    "alert('Calculated Value cannot be negative or zero.');", true);
+                return;
+            }
+            Label lblRemaining = (Label)gvWorkDetails.Rows[0].FindControl("lblRemainingQuantity");
+            decimal rem1;
+            if(decimal.TryParse(lblRemaining.Text, out rem1))
+            {
+                if (resultValue > rem1)
+                {
+                    ScriptManager.RegisterStartupScript(this, GetType(), "alert",
+                    "alert('Cannot Enter More Than Remaining Quantity!');", true);
+                    return;
+                }
 
+            }
             // Show result in textbox
             txtResult.Text = resultValue.ToString("0.######", CultureInfo.InvariantCulture);
 
