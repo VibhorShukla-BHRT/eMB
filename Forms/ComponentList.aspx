@@ -403,6 +403,17 @@ eMB Entry Form
                         OnRowCommand="gvSubComponents_RowCommand" 
                         CssClass="phed-cg-subcomp-table">
                         <Columns>
+                            <asp:TemplateField HeaderText="Actions" 
+                                HeaderStyle-CssClass="phed-cg-col-actions" ItemStyle-CssClass="phed-cg-col-actions">
+                                <ItemTemplate>
+                                    <asp:LinkButton ID="lnkEnter" runat="server"
+                                      CommandName="EntereMB"
+                                      CommandArgument='<%# Container.DataItemIndex %>'
+                                      CssClass="btn btn-sm btn-primary">
+                                      Enter eMB
+                                    </asp:LinkButton>
+                                </ItemTemplate>
+                            </asp:TemplateField>
                             <asp:BoundField DataField="SORItemNo" HeaderText="SOR Sub-Item No." 
                                 HeaderStyle-CssClass="phed-cg-col-soritem" ItemStyle-CssClass="phed-cg-col-soritem" />
                             
@@ -442,18 +453,9 @@ eMB Entry Form
                             
                             <asp:BoundField DataField="AmountWithGST" HeaderText="Amount (with GST)" 
                                 HeaderStyle-CssClass="phed-cg-col-amount" ItemStyle-CssClass="phed-cg-col-amount" />
+                            <asp:BoundField DataField="UnitCost" HeaderText="Cost/Unit(₹)" 
+                                HeaderStyle-CssClass="phed-cg-col-sorfrom" ItemStyle-CssClass="phed-cg-col-sorfrom" />
                             
-                            <asp:TemplateField HeaderText="Actions" 
-                                HeaderStyle-CssClass="phed-cg-col-actions" ItemStyle-CssClass="phed-cg-col-actions">
-                                <ItemTemplate>
-                                    <asp:LinkButton ID="lnkEnter" runat="server"
-                                      CommandName="EntereMB"
-                                      CommandArgument='<%# Container.DataItemIndex %>'
-                                      CssClass="btn btn-sm btn-primary">
-                                      Enter eMB
-                                    </asp:LinkButton>
-                                </ItemTemplate>
-                            </asp:TemplateField>
                         </Columns>
                     </asp:GridView>
                 </div>

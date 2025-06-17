@@ -128,7 +128,8 @@ namespace PHEDChhattisgarh
                         entry.SORSubItem,
                         entry.Qty,
                         entry.ActualUnit,
-                        entry.AmountWithGST
+                        entry.AmountWithGST,
+                        entry.UnitCost
                     FROM [JJM].[dbo].[eMB_ComponentMaterialsEntry] entry
                      WHERE 
                         entry.Work_Code = @WorkCode
