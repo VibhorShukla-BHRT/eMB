@@ -71,7 +71,12 @@
         .work-occupied thead {
             background-color: #ffcccc;
         }
-
+        .btn-edit {
+            width: 72px;
+            background-color: #0066cc;
+            color: white;
+            margin: 2px 0px;
+        }
         body {
             height: 100vh;
             overflow: hidden;
@@ -426,7 +431,8 @@ eMB Entry Form
                         <label class="font-weight-bold">Remarks:</label>
                         <asp:TextBox ID="txtRemarks" runat="server" CssClass="form-control" TextMode="MultiLine" Rows="3"></asp:TextBox>
                     </div>
-
+                    <asp:Button ID="btnSave" runat="server" Text="Save Entry" CssClass="btn btn-primary" OnClick="btnSave_Click" OnClientClick="return validateForm();" />
+                    <asp:Button ID="btnReset" runat="server" Text="Reset" CssClass="btn btn-secondary" OnClick="btnReset_Click" />
                     <asp:UpdatePanel ID="upnlEntries" runat="server" UpdateMode="Conditional">
                         <ContentTemplate>
                             <div class="row mt-2">
@@ -484,7 +490,7 @@ eMB Entry Form
                                             <asp:TemplateField HeaderText="Actions">
                                                 <ItemTemplate>
                                                     <asp:LinkButton ID="btnEdit" runat="server" CommandName="EditItem" CommandArgument='<%# Eval("EmbId") %>' 
-                                                        CssClass="btn btn-sm btn-primary" Text="Edit" />
+                                                        CssClass="btn btn-sm btn-edit" Text="Edit" />
                                                     <asp:LinkButton ID="btnDelete" runat="server" CommandName="DeleteItem" CommandArgument='<%# Eval("EmbId") %>' 
                                                         CssClass="btn btn-sm btn-danger" Text="Delete" OnClientClick="return confirm('Are you sure you want to delete this entry?');" />
                                                 </ItemTemplate>
@@ -498,8 +504,6 @@ eMB Entry Form
 
                    <div class="row mt-3">
                         <div class="col-md-12">
-                            <asp:Button ID="btnSave" runat="server" Text="Save Entry" CssClass="btn btn-primary" OnClick="btnSave_Click" OnClientClick="return validateForm();" />
-                            <asp:Button ID="btnReset" runat="server" Text="Reset" CssClass="btn btn-secondary" OnClick="btnReset_Click" />
                             <div class="floating-button-container">
                                 <asp:Button ID="btnBackToComponentList" runat="server" Text="Back to Sub-Components" CssClass="floating-button" OnClick="btnBackToComponentList_Click" />
                             </div>
