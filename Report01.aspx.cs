@@ -6,7 +6,7 @@ using System.Data.SqlClient;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-namespace YourNamespace
+namespace PHEDChhattisgarh
 {
     public partial class Report01 : System.Web.UI.Page
     {

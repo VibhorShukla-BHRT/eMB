@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="Report01.aspx.cs" Inherits="YourNamespace.Report01" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="Report01.aspx.cs" Inherits="PHEDChhattisgarh.Report01" %>
 
 <!DOCTYPE html>
 
