@@ -245,6 +245,16 @@
     font-weight: bold;
     margin-left: 8px;
 }
+        .overall-progress {
+    background-color: #e74c3c;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+}
     </style>
 </head>
 <body>
@@ -273,7 +283,9 @@
                 <h3>Agreement Details</h3>
                 <div id="agreementContent" class="details-grid"></div>
             </div>
-            
+            <div id="overallProgress" class="overall-progress" style="display: none;">
+                <span id="overallProgressText">Overall Work Progress: 0%</span>
+            </div>
             <div id="componentsSection" class="components-section">
                 <h3>Components</h3>
                 <div id="componentsContent"></div>
@@ -442,8 +454,31 @@
                 `;
                 content.appendChild(componentDiv);
             });
+            // Calculate and display overall progress
+            calculateAndDisplayOverallProgress(components);
             
             document.getElementById('componentsSection').style.display = 'block';
+        }
+        function calculateAndDisplayOverallProgress(components) {
+            if (!components || components.length === 0) {
+                document.getElementById('overallProgress').style.display = 'none';
+                return;
+            }
+
+            var totalProgress = 0;
+            var componentCount = components.length;
+
+            components.forEach(function (component) {
+                var componentProgress = calculateProgressPercentage(component.CompletedQty, component.AA_Quantity);
+                totalProgress += componentProgress;
+            });
+
+            var overallProgress = totalProgress / componentCount;
+            var roundedProgress = Math.round(overallProgress * 100) / 100; // Round to 2 decimal places
+
+            document.getElementById('overallProgressText').textContent =
+                `Overall Work Progress: ${roundedProgress}% (${componentCount} components)`;
+            document.getElementById('overallProgress').style.display = 'block';
         }
         function refreshReport() {
             var embBook = document.getElementById('<%= ddlEmbBooks.ClientID %>').value;
@@ -630,6 +665,7 @@
         function hideReportSections() {
             document.getElementById('agreementDetails').style.display = 'none';
             document.getElementById('componentsSection').style.display = 'none';
+            document.getElementById('overallProgress').style.display = 'none';
         }
 
         function onFailure(error) {
