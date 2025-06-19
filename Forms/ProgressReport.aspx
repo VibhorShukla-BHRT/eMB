@@ -1,32 +1,16 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="ProgressReport.aspx.cs" Inherits="PHEDChhattisgarh.ProgressReport" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="../MasterPages/MasterPage.master" AutoEventWireup="true" CodeFile="ProgressReport.aspx.cs" Inherits="PHEDChhattisgarh.ProgressReport" %>
 
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head runat="server">
-    <title>Progress Report - eMB System</title>
+<asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <style type="text/css">
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f5f5f5;
-        }
         
-        .container {
+        .container01 {
             max-width: 1200px;
             margin: 0 auto;
             background-color: white;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        
-        .header {
-            background-color: #2c3e50;
-            color: white;
-            padding: 15px;
-            border-radius: 5px;
-            margin-bottom: 20px;
         }
         
         .emb-selector {
@@ -256,16 +240,25 @@
     font-weight: bold;
 }
     </style>
-</head>
-<body>
-    <form id="form1" runat="server">
-        <asp:ScriptManager ID="ScriptManager1" runat="server" EnablePageMethods="true" />
+</asp:Content>
+<asp:Content ID="Content2" ContentPlaceHolderID="TitleContent" Runat="Server">
+eMB Progress Report
+</asp:Content>
+
+<asp:Content ID="Content3" ContentPlaceHolderID="BreadcrumbContent" Runat="Server">
+<ul class="breadcrumb-title">
+    <li class="breadcrumb-item">
+        <a href="frmHome.aspx"> <i class="fa fa-home"></i> </a>
+    </li>
+    <li class="breadcrumb-item">
+        <a href="frmHome.aspx">Dashboard</a>
+    </li> 
+</ul>
+</asp:Content>
+
+<asp:Content ID="Content4" ContentPlaceHolderID="MainContent" Runat="Server">
         
-        <div class="container">
-            <div class="header">
-                <h1>eMB Progress Report</h1>
-            </div>
-            
+        <div class="container01">
             <div class="emb-selector">
                 <label for="ddlEmbBooks">Select eMB Book Number:</label>
                 <asp:DropDownList ID="ddlEmbBooks" runat="server" CssClass="emb-dropdown">
@@ -276,7 +269,7 @@
                 </asp:DropDownList>
                 <button type="button" id="btnLoadReport" onclick="loadProgressReport()">Load Report</button>
                 <button type="button" id="btnRefresh" onclick="refreshReport()" style="margin-left: 10px; background-color: #27ae60;">Refresh
-</button>
+            </button>
             </div>
             
             <div id="agreementDetails" class="agreement-details">
@@ -291,7 +284,6 @@
                 <div id="componentsContent"></div>
             </div>
         </div>
-    </form>
 
     <script type="text/javascript">
         function loadEmbBooks() {
@@ -679,5 +671,4 @@
             loadEmbBooks();
         };
     </script>
-</body>
-</html>
+</asp:Content>
