@@ -4,6 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title>Progress Report - eMB System</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <style type="text/css">
         body {
             font-family: Arial, sans-serif;
@@ -135,7 +136,15 @@
             background-color: white;
             border-radius: 4px;
         }
-        
+        .progress-percentage {
+            background-color: #3498db;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
         .subcomponents-section {
             margin-top: 15px;
         }
@@ -227,6 +236,15 @@
             background-color: #95a5a6;
             color: white;
         }
+        .subcomponent-progress {
+    background-color: #27ae60;
+    color: white;
+    padding: 3px 6px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: bold;
+    margin-left: 8px;
+}
     </style>
 </head>
 <body>
@@ -236,7 +254,6 @@
         <div class="container">
             <div class="header">
                 <h1>eMB Progress Report</h1>
-                <p>Comprehensive view of eMB entries, components, and progress</p>
             </div>
             
             <div class="emb-selector">
@@ -248,6 +265,8 @@
                     <asp:ListItem Text="-- Select Work Code --" Value="" />
                 </asp:DropDownList>
                 <button type="button" id="btnLoadReport" onclick="loadProgressReport()">Load Report</button>
+                <button type="button" id="btnRefresh" onclick="refreshReport()" style="margin-left: 10px; background-color: #27ae60;">Refresh
+</button>
             </div>
             
             <div id="agreementDetails" class="agreement-details">
@@ -375,6 +394,11 @@
             
             document.getElementById('agreementDetails').style.display = 'block';
         }
+        function calculateProgressPercentage(completedQty, aaQuantity) {
+            if (!aaQuantity || aaQuantity == 0) return 0;
+            var percentage = (completedQty / aaQuantity) * 100;
+            return Math.round(percentage * 100) / 100; // Round to 2 decimal places
+        }
         
         function displayComponents(components) {
             console.log('Components Data:', components); // Debug log
@@ -396,6 +420,7 @@
                 componentDiv.innerHTML = `
                     <div class="component-header" onclick="toggleComponent(${index})">
                         <strong>${component.ComponentName || 'Unknown Component'}</strong>
+<span class="progress-percentage">${calculateProgressPercentage(component.CompletedQty, component.AA_Quantity)}% Complete</span>
                         <span class="expand-icon">▶</span>
                     </div>
                     <div class="component-content" id="component-${index}">
@@ -419,6 +444,19 @@
             });
             
             document.getElementById('componentsSection').style.display = 'block';
+        }
+        function refreshReport() {
+            var embBook = document.getElementById('<%= ddlEmbBooks.ClientID %>').value;
+            var workCode = document.getElementById('<%= ddlWorkCodes.ClientID %>').value;
+
+            if (!embBook || !workCode) {
+                alert('Please select both eMB Book and Work Code first');
+                return;
+            }
+
+            // Clear existing data and reload
+            hideReportSections();
+            loadProgressReport();
         }
         
         function toggleComponent(index) {
@@ -446,7 +484,7 @@
                 var components = JSON.parse(document.getElementById('componentsSection').dataset.components || '[]');
                 var component = components[componentIndex];
 
-                PageMethods.GetSubComponents(workCode, component.Year_Of_Agreement, component.Agreement_No,
+                PageMethods.GetSubComponentsWithProgress(workCode, component.Year_Of_Agreement, component.Agreement_No,
                     component.ComponentID, component.AgreementBy,
                     function (result) { onSubComponentsSuccess(result, componentIndex); },
                     onFailure);
@@ -471,6 +509,7 @@
                 subDiv.innerHTML = `
                     <div class="subcomponent-header" onclick="toggleSubComponent(${componentIndex}, ${subIndex})">
                         ${subComponent.SORItemNo} - ${subComponent.SORItem}
+<span class="subcomponent-progress">${calculateProgressPercentage(subComponent.CompletedQty, subComponent.Qty)}% Complete</span>
                         <span class="expand-icon">▶</span>
                     </div>
                     <div class="subcomponent-content" id="subcomponent-${componentIndex}-${subIndex}">

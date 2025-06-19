@@ -282,7 +282,81 @@ namespace PHEDChhattisgarh
 
             return subComponents;
         }
+        [WebMethod]
+        public static List<SubComponentWithProgress> GetSubComponentsWithProgress(string workCode, string yearOfAgreement,
+    string agreementNo, int componentID, string agreementBy)
+        {
+            List<SubComponentWithProgress> subComponents = new List<SubComponentWithProgress>();
 
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    string query = @"SELECT 
+                            entry.SORItem,
+                            entry.SORFrom,
+                            entry.BasicorAmendment,
+                            entry.SORItemNo,
+                            entry.SORSubItem,
+                            entry.Qty,
+                            entry.ActualUnit,
+                            entry.AmountWithGST,
+                            entry.UnitCost,
+                            ISNULL((SELECT SUM(ResultValue) 
+                                   FROM [JJM].[dbo].[eMB_Entry] e
+                                   WHERE e.WorkCode = @WorkCode
+                                   AND e.ComponentID = @ComponentID
+                                   AND e.SORItemNo = entry.SORItemNo
+                                   AND e.Deleted = 0
+                                   AND e.IsCurrent = 1), 0) AS CompletedQty
+                        FROM [JJM].[dbo].[eMB_ComponentMaterialsEntry] entry
+                        WHERE 
+                            entry.Work_Code = @WorkCode
+                            AND entry.Year_of_Agreement = @YearOfAgreement
+                            AND entry.Agreement_No = @AgreementNo
+                            AND entry.ComponentID = @ComponentID
+                            AND entry.AgreementBy = @AgreementBy
+                            AND entry.Qty > 0";
+
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@WorkCode", workCode);
+                        cmd.Parameters.AddWithValue("@YearOfAgreement", yearOfAgreement);
+                        cmd.Parameters.AddWithValue("@AgreementNo", agreementNo);
+                        cmd.Parameters.AddWithValue("@ComponentID", componentID);
+                        cmd.Parameters.AddWithValue("@AgreementBy", agreementBy);
+
+                        conn.Open();
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                SubComponentWithProgress subComponent = new SubComponentWithProgress
+                                {
+                                    SORItem = reader["SORItem"].ToString(),
+                                    SORFrom = reader["SORFrom"].ToString(),
+                                    BasicorAmendment = reader["BasicorAmendment"].ToString(),
+                                    SORItemNo = reader["SORItemNo"].ToString(),
+                                    SORSubItem = reader["SORSubItem"].ToString(),
+                                    Qty = Convert.ToDecimal(reader["Qty"]),
+                                    ActualUnit = reader["ActualUnit"].ToString(),
+                                    AmountWithGST = Convert.ToDecimal(reader["AmountWithGST"]),
+                                    UnitCost = Convert.ToDecimal(reader["UnitCost"]),
+                                    CompletedQty = Convert.ToDecimal(reader["CompletedQty"])
+                                };
+                                subComponents.Add(subComponent);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error fetching sub-components with progress: " + ex.Message);
+            }
+
+            return subComponents;
+        }
         [WebMethod]
         public static List<EmbEntryData> GetEmbEntries(string workCode, string agreementBy,
             string yearOfAgreement, string agreementNo, int componentID, string sorItemNo)
@@ -385,7 +459,10 @@ namespace PHEDChhattisgarh
         public decimal CompletedQty { get; set; }
         public decimal RemainingQty { get; set; }
     }
-
+    public class SubComponentWithProgress : SubComponentData
+    {
+        public decimal CompletedQty { get; set; }
+    }
     public class SubComponentData
     {
         public string SORItem { get; set; }
